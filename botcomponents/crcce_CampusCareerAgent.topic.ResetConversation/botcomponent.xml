@@ -1,0 +1,10 @@
+<botcomponent schemaname="crcce_CampusCareerAgent.topic.ResetConversation">
+  <componenttype>9</componenttype>
+  <iscustomizable>0</iscustomizable>
+  <name>重置对话</name>
+  <parentbotid>
+    <schemaname>crcce_CampusCareerAgent</schemaname>
+  </parentbotid>
+  <statecode>0</statecode>
+  <statuscode>1</statuscode>
+</botcomponent>

@@ -1,0 +1,11 @@
+<botcomponent schemaname="crcce_CampusCareerAgent.topic.Signin">
+  <componenttype>9</componenttype>
+  <description>当智能体需要让用户登录或要求用户登录时，会触发此系统主题</description>
+  <iscustomizable>0</iscustomizable>
+  <name>登录</name>
+  <parentbotid>
+    <schemaname>crcce_CampusCareerAgent</schemaname>
+  </parentbotid>
+  <statecode>0</statecode>
+  <statuscode>1</statuscode>
+</botcomponent>

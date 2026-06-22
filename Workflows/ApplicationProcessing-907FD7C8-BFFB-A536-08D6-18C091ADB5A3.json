@@ -1,0 +1,302 @@
+{
+  "properties": {
+    "connectionReferences": {
+      "shared_commondataserviceforapps": {
+        "api": {
+          "name": "shared_commondataserviceforapps"
+        },
+        "connection": {
+          "connectionReferenceLogicalName": "new_sharedcommondataserviceforapps_12750"
+        },
+        "runtimeSource": "embedded"
+      },
+      "shared_office365": {
+        "api": {
+          "name": "shared_office365"
+        },
+        "connection": {
+          "connectionReferenceLogicalName": "new_sharedoffice365_9a8c0f41"
+        },
+        "runtimeSource": "invoker"
+      }
+    },
+    "definition": {
+      "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+      "contentVersion": "1.0.0.0",
+      "parameters": {
+        "$authentication": {
+          "defaultValue": {},
+          "type": "SecureObject"
+        },
+        "$connections": {
+          "defaultValue": {},
+          "type": "Object"
+        }
+      },
+      "triggers": {
+        "manual": {
+          "type": "Request",
+          "kind": "Skills",
+          "inputs": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "description": "Enter an email address.",
+                  "format": "email",
+                  "title": "Email",
+                  "type": "string",
+                  "x-ms-content-hint": "EMAIL",
+                  "x-ms-dynamically-added": true
+                },
+                "text": {
+                  "description": "Please enter your input",
+                  "title": "JobId",
+                  "type": "string",
+                  "x-ms-content-hint": "TEXT",
+                  "x-ms-dynamically-added": true
+                }
+              },
+              "required": [
+                "email",
+                "text"
+              ]
+            }
+          },
+          "metadata": {
+            "flowSystemMetadata": {
+              "flowKind": "Stateless"
+            }
+          }
+        }
+      },
+      "actions": {
+        "Get_a_row_by_ID_from_selected_environment": {
+          "type": "OpenApiConnection",
+          "inputs": {
+            "parameters": {
+              "organization": "https://org4cd1be5d.crm.dynamics.com",
+              "entityName": "crcce_jobs",
+              "recordId": "@triggerBody()?['text']"
+            },
+            "host": {
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+              "operationId": "GetItemWithOrganization",
+              "connectionName": "shared_commondataserviceforapps"
+            }
+          },
+          "runAfter": {}
+        },
+        "List_rows_from_selected_environment": {
+          "type": "OpenApiConnection",
+          "inputs": {
+            "parameters": {
+              "organization": "https://org4cd1be5d.crm.dynamics.com",
+              "entityName": "crcce_studentprofile_v2s",
+              "$filter": "crcce_email eq '@{triggerBody()?['email']}'",
+              "$top": 1
+            },
+            "host": {
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+              "operationId": "ListRecordsWithOrganization",
+              "connectionName": "shared_commondataserviceforapps"
+            }
+          },
+          "runAfter": {
+            "Get_a_row_by_ID_from_selected_environment": [
+              "Succeeded"
+            ]
+          }
+        },
+        "Respond_to_the_agent": {
+          "type": "Response",
+          "kind": "Skills",
+          "inputs": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "title": "Status",
+                  "description": "",
+                  "type": "boolean",
+                  "x-ms-content-hint": "BOOLEAN",
+                  "x-ms-dynamically-added": true
+                }
+              },
+              "additionalProperties": {}
+            },
+            "statusCode": 200,
+            "body": {
+              "status": true
+            }
+          },
+          "runAfter": {
+            "Draft_an_email_message": [
+              "Succeeded"
+            ]
+          }
+        },
+        "Run_a_prompt": {
+          "type": "OpenApiConnection",
+          "inputs": {
+            "parameters": {
+              "recordId": "c33d7280-460b-45a8-9f53-b47011e30e03",
+              "item/requestv2/Title": "@outputs('Get_a_row_by_ID_from_selected_environment')?['body/crcce_job1']",
+              "item/requestv2/JD": "@outputs('Get_a_row_by_ID_from_selected_environment')?['body/crcce_jobdescriptionrequirements']",
+              "item/requestv2/Resume": "@outputs('Resume_Text')",
+              "item/requestv2/Company": "@outputs('Get_a_row_by_ID_from_selected_environment')?['body/crcce_companyname']"
+            },
+            "host": {
+              "apiId": "providers/Microsoft.ProcessSimple/operationGroups/aibuilder",
+              "operationId": "aibuilderpredict_customprompt",
+              "connectionName": "shared_commondataserviceforapps"
+            }
+          },
+          "runAfter": {
+            "Name": [
+              "SUCCEEDED"
+            ]
+          }
+        },
+        "JSON_Object": {
+          "type": "Compose",
+          "inputs": "@json(\n  outputs('Run_a_prompt')?['body/responsev2/predictionOutput/text']\n)",
+          "runAfter": {
+            "Run_a_prompt": [
+              "Succeeded"
+            ]
+          }
+        },
+        "HTTP": {
+          "type": "Http",
+          "inputs": {
+            "uri": "https://careeragent-rendercv-api-f5avg9duf4gyg2cn.italynorth-01.azurewebsites.net/render-cv",
+            "method": "POST",
+            "headers": {
+              "Content-Type": "application/json",
+              "x-api-key": "200e4bc99fef8316832c7c6d5cd10f2c6f5f09bcd8c39f3f7f75e9e10d48fcb8"
+            },
+            "body": {
+              "document": "@outputs('JSON_Object')"
+            }
+          },
+          "runAfter": {
+            "JSON_Object": [
+              "Succeeded"
+            ]
+          }
+        },
+        "Email_Subject": {
+          "type": "OpenApiConnection",
+          "inputs": {
+            "parameters": {
+              "recordId": "b0aae717-bf90-4d0f-8614-21d13d0d09ed",
+              "item/requestv2/Title": "@outputs('Get_a_row_by_ID_from_selected_environment')?['body/crcce_job1']",
+              "item/requestv2/Resume": "@outputs('Resume_Text')",
+              "item/requestv2/Company": "@outputs('Get_a_row_by_ID_from_selected_environment')?['body/crcce_companyname']",
+              "item/requestv2/Requirement": "@outputs('Get_a_row_by_ID_from_selected_environment')?['body/crcce_jobdescriptionrequirements']"
+            },
+            "host": {
+              "apiId": "providers/Microsoft.ProcessSimple/operationGroups/aibuilder",
+              "operationId": "aibuilderpredict_customprompt",
+              "connectionName": "shared_commondataserviceforapps"
+            }
+          },
+          "runAfter": {
+            "PDF_Content": [
+              "SUCCEEDED"
+            ]
+          }
+        },
+        "Email_Body": {
+          "type": "OpenApiConnection",
+          "inputs": {
+            "parameters": {
+              "recordId": "6660302e-1a79-4ac7-9487-3d25caece033",
+              "item/requestv2/Title": "@outputs('Get_a_row_by_ID_from_selected_environment')?['body/crcce_job1']",
+              "item/requestv2/JD": "@outputs('Get_a_row_by_ID_from_selected_environment')?['body/crcce_jobdescriptionrequirements']",
+              "item/requestv2/Resume": "@outputs('Resume_Text')",
+              "item/requestv2/Company": "@outputs('Get_a_row_by_ID_from_selected_environment')?['body/crcce_companyname']"
+            },
+            "host": {
+              "apiId": "providers/Microsoft.ProcessSimple/operationGroups/aibuilder",
+              "operationId": "aibuilderpredict_customprompt",
+              "connectionName": "shared_commondataserviceforapps"
+            }
+          },
+          "runAfter": {
+            "Email_Subject": [
+              "Succeeded"
+            ]
+          }
+        },
+        "Body": {
+          "type": "Compose",
+          "inputs": "@outputs('Email_Body')?['body/responsev2/predictionOutput/text']",
+          "runAfter": {
+            "Email_Body": [
+              "Succeeded"
+            ]
+          }
+        },
+        "Draft_an_email_message": {
+          "type": "OpenApiConnection",
+          "inputs": {
+            "parameters": {
+              "draftMessage/To": "@outputs('Get_a_row_by_ID_from_selected_environment')?['body/crcce_applicationemail']",
+              "draftMessage/Subject": "@outputs('Email_Subject')?['body/responsev2/predictionOutput/text']",
+              "draftMessage/Body": "<p class=\"editor-paragraph\">@{outputs('Body')}</p>",
+              "draftMessage/Attachments": [
+                {
+                  "Name": "@{outputs('Name')}_CV_@{outputs('Get_a_row_by_ID_from_selected_environment')?['body/crcce_job1']}.pdf",
+                  "ContentBytes": "@outputs('PDF_Content')"
+                }
+              ],
+              "draftMessage/Importance": "Normal"
+            },
+            "host": {
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_office365",
+              "operationId": "DraftEmail",
+              "connectionName": "shared_office365"
+            }
+          },
+          "runAfter": {
+            "Body": [
+              "Succeeded"
+            ]
+          }
+        },
+        "Resume_Text": {
+          "type": "Compose",
+          "inputs": "@first(\n  outputs('List_rows_from_selected_environment')?['body/value']\n)?['crcce_resume']",
+          "runAfter": {
+            "List_rows_from_selected_environment": [
+              "Succeeded"
+            ]
+          }
+        },
+        "Name": {
+          "type": "Compose",
+          "inputs": "@first(\n  outputs('List_rows_from_selected_environment')?['body/value']\n)?['crcce_name']",
+          "runAfter": {
+            "Resume_Text": [
+              "Succeeded"
+            ]
+          }
+        },
+        "PDF_Content": {
+          "type": "Compose",
+          "inputs": "@body('HTTP')",
+          "runAfter": {
+            "HTTP": [
+              "Succeeded"
+            ]
+          }
+        }
+      },
+      "outputs": {}
+    },
+    "templateName": null
+  },
+  "schemaVersion": "1.0.0.0"
+}

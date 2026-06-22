@@ -1,0 +1,10 @@
+<botcomponent schemaname="crcce_CampusCareerAgent.topic.CVModification">
+  <componenttype>9</componenttype>
+  <iscustomizable>0</iscustomizable>
+  <name>CV Modification</name>
+  <parentbotid>
+    <schemaname>crcce_CampusCareerAgent</schemaname>
+  </parentbotid>
+  <statecode>1</statecode>
+  <statuscode>2</statuscode>
+</botcomponent>

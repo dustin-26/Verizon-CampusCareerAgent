@@ -1,0 +1,19 @@
+kind: TaskDialog
+inputs:
+  - kind: AutomaticTaskInput
+    propertyName: Position
+    name: Position
+    shouldPromptUser: true
+
+  - kind: AutomaticTaskInput
+    propertyName: Resume
+    name: Resume
+    shouldPromptUser: true
+
+modelDisplayName: Course Recommendation
+modelDescription: Course Recommendation
+action:
+  kind: InvokeAIBuilderModelTaskAction
+  aIModelId: 763b9b17-90fa-4d3d-95af-185a4f588443
+
+outputMode: All

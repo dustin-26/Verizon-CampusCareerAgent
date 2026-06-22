@@ -1,0 +1,10 @@
+<botcomponent schemaname="crcce_CampusCareerAgent.topic.BuildResumeFromScratch">
+  <componenttype>9</componenttype>
+  <iscustomizable>0</iscustomizable>
+  <name>v2_Build Resume From Scratch</name>
+  <parentbotid>
+    <schemaname>crcce_CampusCareerAgent</schemaname>
+  </parentbotid>
+  <statecode>0</statecode>
+  <statuscode>1</statuscode>
+</botcomponent>

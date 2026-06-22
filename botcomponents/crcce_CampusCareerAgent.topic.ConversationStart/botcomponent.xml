@@ -1,0 +1,11 @@
+<botcomponent schemaname="crcce_CampusCareerAgent.topic.ConversationStart">
+  <componenttype>9</componenttype>
+  <description>当智能体接收到指示新对话开始的活动时，会触发此系统主题。如果不想让智能体启动对话，请禁用此主题。</description>
+  <iscustomizable>0</iscustomizable>
+  <name>对话开始</name>
+  <parentbotid>
+    <schemaname>crcce_CampusCareerAgent</schemaname>
+  </parentbotid>
+  <statecode>0</statecode>
+  <statuscode>1</statuscode>
+</botcomponent>

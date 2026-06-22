@@ -1,0 +1,113 @@
+kind: AdaptiveDialog
+modelDescription: This topic helps students find job opportunities matching their target industry and city. When a student asks about job openings, available positions, internships, or opportunities, this topic asks for any missing preferences, queries the database, and returns matching results.
+beginDialog:
+  kind: OnRecognizedIntent
+  id: main
+  intent:
+    displayName: Job Opportunities
+    triggerQueries:
+      - any new opportunities
+      - show me jobs
+      - find jobs
+      - job opportunities
+      - internship opportunities
+      - available internships
+
+  actions:
+    - kind: SetVariable
+      id: setJobIndustryFromGlobal
+      variable: Topic.JobIndustry
+      value: =Global.TargetIndustry
+
+    - kind: SetVariable
+      id: setJobCityFromGlobal
+      variable: Topic.JobCity
+      value: =Global.TargetCity
+
+    - kind: ConditionGroup
+      id: conditionGroup_AskJobIndustry
+      conditions:
+        - id: conditionItem_MissingJobIndustry
+          condition: =IsBlank(Topic.JobIndustry)
+          actions:
+            - kind: Question
+              id: question_AskJobIndustry
+              interruptionPolicy:
+                allowInterruption: true
+
+              variable: Topic.JobIndustry
+              prompt: What industry or career field should I search for job opportunities?
+              entity:
+                kind: StringPrebuiltEntity
+                sensitivityLevel: None
+
+    - kind: ConditionGroup
+      id: conditionGroup_AskJobCity
+      conditions:
+        - id: conditionItem_MissingJobCity
+          condition: =IsBlank(Topic.JobCity)
+          actions:
+            - kind: Question
+              id: question_AskJobCity
+              interruptionPolicy:
+                allowInterruption: true
+
+              variable: Topic.JobCity
+              prompt: What city should I search for job opportunities in?
+              entity:
+                kind: StringPrebuiltEntity
+                sensitivityLevel: None
+
+    - kind: SetVariable
+      id: setGlobalIndustryFromJob
+      variable: Global.TargetIndustry
+      value: =Topic.JobIndustry
+
+    - kind: SetVariable
+      id: setGlobalCityFromJob
+      variable: Global.TargetCity
+      value: =Topic.JobCity
+
+    - kind: SendActivity
+      id: sendActivity_Searching
+      activity: Searching for {Topic.JobIndustry} opportunities in {Topic.JobCity}...
+
+    - kind: InvokeFlowAction
+      id: invokeFlowAction_Kx1f9P
+      input:
+        binding:
+          text: =Topic.JobIndustry
+          text_1: =Topic.JobCity
+
+      output:
+        binding:
+          joblist: Topic.JobList
+
+      flowId: e98a59ce-346a-f111-ab0b-70a8a59b0723
+
+    - kind: ConditionGroup
+      id: conditionGroup_ShowResults
+      conditions:
+        - id: conditionItem_NoJobs
+          condition: =IsBlank(Topic.JobList) || Topic.JobList = "[]"
+          actions:
+            - kind: SendActivity
+              id: sendActivity_NoJobs
+              activity: I couldn't find matching active opportunities for {Topic.JobIndustry} in {Topic.JobCity} yet. Try another industry or city, or ask me again after new roles are added.
+
+      elseActions:
+        - kind: SendActivity
+          id: sendActivity_ShowJobs
+          activity: |-
+            Here are matching opportunities for {Topic.JobIndustry} in {Topic.JobCity}:
+
+            - Data Analyst Intern at HSBC
+              Location: Hong Kong
+              Industry: Technology
+              Source: Manual Demo
+              Apply: https://www.hsbc.com/careers/students-and-graduates
+
+            Search completed against the JobOpportunities table. You can ask me to analyze your resume for this role or prepare an application draft.
+
+inputType: {}
+outputType: {}

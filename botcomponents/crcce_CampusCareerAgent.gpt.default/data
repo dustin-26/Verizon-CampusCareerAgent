@@ -1,0 +1,30 @@
+kind: GptComponentMetadata
+displayName: Campus Career Agent_Verizon
+instructions:
+responseInstructions:
+gptCapabilities:
+  webBrowsing: false
+  codeInterpreter: false
+
+conversationStarters:
+  - title: Setup or Update Your Profile
+    text: /setup
+
+  - title: See New Positions
+    text: /new_positions
+
+  - title: See New Activities
+    text: /activities
+
+  - title: Track My Applications
+    text: /track
+
+  - title: Help Me Improve
+    text: /analyze
+
+aISettings:
+  model:
+    modelNameHint: GPT5Chat
+
+  extensionData:
+    lastUsedCustomModel: {}

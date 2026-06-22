@@ -1,0 +1,17 @@
+<botcomponent schemaname="crcce_CampusCareerAgent.gpt.default">
+  <componenttype>15</componenttype>
+  <description>A career-oriented AI agent that supports HK university students from admission to graduation.
+① Personal Profile Management: The agent helps record and update the student's experience, awards, etc.
+② Opportunity Hunting: The agent connects to the student's email inbox, suggests job opportunities and extra-curricular activities that are helpful for the student towards their career goals, by analyzing emails from career centers or job notifications.
+③ CV Customization: Based on a certain JD, the agent filters relevant experiences of the students, modifies wording, and gives a customized CV for the position.
+④ Auto application: The agent can draft an email with the customized CV and cover letter for a specific position.
+⑤ Application Progress Monitoring: The agent monitors the student's inbox to keep track of the application progress of each application.
+⑥ Analysis and Actionable Advice: The agent analyzes the student's weakness for the targeted position and suggests credit courses or LinkedIn Learning courses.</description>
+  <iscustomizable>0</iscustomizable>
+  <name>Campus Career Agent_Verizon</name>
+  <parentbotid>
+    <schemaname>crcce_CampusCareerAgent</schemaname>
+  </parentbotid>
+  <statecode>0</statecode>
+  <statuscode>1</statuscode>
+</botcomponent>

@@ -1,0 +1,169 @@
+kind: AdaptiveDialog
+modelDescription: |-
+  This topic should be triggered when the user asks for:
+  - /analyze; or
+  - Explicitly ask for weakness analysis, improvement, or course recommendation.
+beginDialog:
+  kind: OnRecognizedIntent
+  id: main
+  intent: {}
+  actions:
+    - kind: InvokeFlowAction
+      id: invokeFlowAction_ZTG2ET
+      input:
+        binding:
+          text: =System.User.Email
+
+      output:
+        binding:
+          email: Topic.Email
+          found: Topic.Found
+          gpa: Topic.GPA
+          industry: Topic.Industry
+          location: Topic.Location
+          major: Topic.Major
+          name: Topic.Name
+          phone: Topic.Phone
+          position: Topic.Position
+          profileid: Topic.ProfileId
+          resume: Topic.Resume
+          school: Topic.School
+
+      flowId: 70b16b21-6e6c-f111-ab0d-70a8a59b0723
+
+    - kind: InvokeAIBuilderModelAction
+      id: invokeAIBuilderModelAction_fFSm9f
+      input:
+        binding:
+          Position: =Topic.Position
+          Resume: =Topic.Resume
+
+      output:
+        binding:
+          predictionOutput: Topic.RecommendationOutput
+
+      aIModelId: 763b9b17-90fa-4d3d-95af-185a4f588443
+
+    - kind: SendActivity
+      id: sendActivity_YJ0Nw2
+      activity:
+        text:
+          - "{Topic.RecommendationOutput.structuredOutput.analysis}"
+        attachments:
+          - kind: AdaptiveCardTemplate
+            cardContent: |-
+              ={
+                '$schema': "https://adaptivecards.io/schemas/adaptive-card.json",
+                type: "AdaptiveCard",
+                version: "1.5",
+                body: [
+                  {
+                    type: "TextBlock",
+                    text: "Learning Recommendations",
+                    weight: "Bolder",
+                    size: "Large",
+                    wrap: true
+                  },
+                  {
+                    type: "TextBlock",
+                    text: "Target Position",
+                    weight: "Bolder",
+                    spacing: "Medium",
+                    wrap: true
+                  },
+                  {
+                    type: "TextBlock",
+                    text: Text(Topic.Position),
+                    size: "Medium",
+                    wrap: true,
+                    spacing: "Small"
+                  },
+                  {
+                    type: "Container",
+                    spacing: "Large",
+                    separator: true,
+                    items: [
+                      {
+                        type: "TextBlock",
+                        text: "Recommended HKUST Credit-Bearing Course",
+                        weight: "Bolder",
+                        size: "Medium",
+                        wrap: true
+                      },
+                      {
+                        type: "TextBlock",
+                        text:
+                          Text(
+                            Topic.RecommendationOutput.structuredOutput.credit_course_code
+                          ) &
+                          " — " &
+                          Text(
+                            Topic.RecommendationOutput.structuredOutput.credit_course_name
+                          ),
+                        weight: "Bolder",
+                        wrap: true,
+                        spacing: "Medium"
+                      },
+                      {
+                        type: "TextBlock",
+                        text: Text(
+                          Topic.RecommendationOutput.structuredOutput.credit_course_reason
+                        ),
+                        wrap: true,
+                        spacing: "Small"
+                      }
+                    ]
+                  },
+                  {
+                    type: "Container",
+                    style: "emphasis",
+                    spacing: "Large",
+                    separator: true,
+                    items: [
+                      {
+                        type: "TextBlock",
+                        text: "✨ Recommended LinkedIn Learning Course ✨",
+                        weight: "Bolder",
+                        size: "Medium",
+                        wrap: true
+                      },
+                      {
+                        type: "TextBlock",
+                        text: Text(
+                          Topic.RecommendationOutput.structuredOutput.linkedin_course_name
+                        ),
+                        weight: "Bolder",
+                        wrap: true,
+                        spacing: "Medium"
+                      },
+                      {
+                        type: "TextBlock",
+                        text: Text(
+                          Topic.RecommendationOutput.structuredOutput.linkedin_course_reason
+                        ),
+                        wrap: true,
+                        spacing: "Small"
+                      }
+                    ]
+                  }
+                ],
+                actions: [
+                  {
+                    type: "Action.OpenUrl",
+                    title: "Open LinkedIn Learning Course",
+                    url: Text(
+                      Topic.RecommendationOutput.structuredOutput.linkedin_course_url
+                    )
+                  }
+                ]
+              }
+
+    - kind: BeginDialog
+      id: cXwa0W
+      dialog: crcce_CampusCareerAgent.topic.TopicGuide_triggered
+
+    - kind: EndDialog
+      id: VmPCqn
+
+inputType: {}
+outputType: {}

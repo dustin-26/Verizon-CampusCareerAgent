@@ -1,0 +1,13 @@
+<botcomponent schemaname="crcce_CampusCareerAgent.topic.Escalate">
+  <componenttype>9</componenttype>
+  <description>当用户指示要与代表交谈时，会触发此系统主题。
+您可以在智能体设置中配置智能体处理人工转接场景的方式。
+如果您的智能体不处理上报，应禁用此主题。</description>
+  <iscustomizable>0</iscustomizable>
+  <name>上报</name>
+  <parentbotid>
+    <schemaname>crcce_CampusCareerAgent</schemaname>
+  </parentbotid>
+  <statecode>0</statecode>
+  <statuscode>1</statuscode>
+</botcomponent>

@@ -1,0 +1,55 @@
+kind: AdaptiveDialog
+modelDescription: Use only when the user explicitly asks for course recommendations, classes, electives, or study planning. Do not use this topic for job opportunities, internships, openings, hiring trends, or placement analytics.
+beginDialog:
+  kind: OnRecognizedIntent
+  id: main
+  intent:
+    displayName: Course Advice
+    triggerQueries:
+      - course advice
+      - course recommendations
+      - recommend courses
+      - what courses should I take
+
+  actions:
+    - kind: SetVariable
+      id: setCourseIndustryFromGlobal
+      variable: Topic.CourseIndustry
+      value: =Global.TargetIndustry
+
+    - kind: ConditionGroup
+      id: conditionGroup_needIndustry
+      conditions:
+        - id: conditionItem_missingIndustry
+          condition: =IsBlank(Topic.CourseIndustry)
+          actions:
+            - kind: Question
+              id: question_courseIndustry
+              interruptionPolicy:
+                allowInterruption: true
+
+              variable: Topic.CourseIndustry
+              prompt: What target industry should I use for course recommendations?
+              entity:
+                kind: StringPrebuiltEntity
+                sensitivityLevel: None
+
+    - kind: SetVariable
+      id: setGlobalIndustryFromCourse
+      variable: Global.TargetIndustry
+      value: =Topic.CourseIndustry
+
+    - kind: SendActivity
+      id: sendActivity_ShowCourseRecommendations
+      activity: |-
+        Recommended courses from CourseCatalog for {Topic.CourseIndustry}:
+
+        1. AI for Business Analytics - best for Business Analytics students targeting Technology roles; builds analytics and AI fluency.
+        2. Financial Markets and FinTech - best for Finance students targeting finance or fintech analyst paths.
+        3. Product Management Foundations - best for Computer Science students targeting Technology/Product roles.
+        4. Career Communication for Consulting - best for Business students targeting Consulting roles.
+
+        Priority guidance: choose the closest match for your target industry first, then add one adjacent course to broaden your skill story for applications.
+
+inputType: {}
+outputType: {}

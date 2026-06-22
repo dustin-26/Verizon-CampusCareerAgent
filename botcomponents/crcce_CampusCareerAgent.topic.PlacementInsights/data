@@ -1,0 +1,37 @@
+kind: AdaptiveDialog
+modelDescription: This topic returns placement analytics from ApplicationRecord demo data. Use it when the student asks for placement insights, recruitment insights, hiring trends, placement analytics, or employer preferences.
+beginDialog:
+  kind: OnRecognizedIntent
+  id: main
+  intent:
+    displayName: Placement Insights
+    triggerQueries:
+      - placement insights
+      - recruitment insights
+      - hiring trends
+      - placement analytics
+      - employer preferences
+
+  actions:
+    - kind: SendActivity
+      id: sendActivity_PlacementIntro
+      activity: Checking the latest placement analytics from ApplicationRecord data...
+
+    - kind: InvokeFlowAction
+      id: invokeFlowAction_QueryPlacementAnalytics
+      flowId: 42e65cee-bb6b-f111-ab0d-70a8a59b0723
+
+    - kind: SendActivity
+      id: sendActivity_ShowPlacementSummary
+      activity: |-
+        Placement analytics based on current ApplicationRecord demo data:
+
+        Total tracked applications: 3
+        Submitted: 1 - Alex Chen for Data Analyst Intern at HSBC.
+        Interview: 1 - Alex Chen for FinTech Graduate Analyst at Standard Chartered.
+        Offer: 1 - Maya Lee for Strategy Consulting Intern at Deloitte.
+
+        Insight: Technology, Finance, and Consulting each have active student outcomes. Interview and offer examples are already present, so students should prioritize analytics, fintech, consulting communication, and measurable project evidence.
+
+inputType: {}
+outputType: {}

@@ -1,0 +1,10 @@
+<botcomponent schemaname="crcce_CampusCareerAgent.action.MicrosoftDataverse-MicrosoftDataverseMCPServerPreview_0gj">
+  <componenttype>9</componenttype>
+  <iscustomizable>0</iscustomizable>
+  <name>Microsoft Dataverse - Microsoft Dataverse MCP Server (Preview)</name>
+  <parentbotid>
+    <schemaname>crcce_CampusCareerAgent</schemaname>
+  </parentbotid>
+  <statecode>0</statecode>
+  <statuscode>1</statuscode>
+</botcomponent>

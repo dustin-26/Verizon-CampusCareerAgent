@@ -1,0 +1,11 @@
+<botcomponent schemaname="crcce_CampusCareerAgent.topic.Search">
+  <componenttype>9</componenttype>
+  <description>根据知识来源创建生成式答案。</description>
+  <iscustomizable>0</iscustomizable>
+  <name>对话推进</name>
+  <parentbotid>
+    <schemaname>crcce_CampusCareerAgent</schemaname>
+  </parentbotid>
+  <statecode>0</statecode>
+  <statuscode>1</statuscode>
+</botcomponent>

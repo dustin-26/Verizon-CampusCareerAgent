@@ -1,0 +1,19 @@
+kind: AdaptiveDialog
+beginDialog:
+  kind: OnUnknownIntent
+  id: main
+  actions:
+    - kind: ConditionGroup
+      id: conditionGroup_LktzXw
+      conditions:
+        - id: conditionItem_tlGIVo
+          condition: =System.FallbackCount < 3
+          actions:
+            - kind: SendActivity
+              id: sendMessage_QZreqo
+              activity: 很抱歉，我不确定该如何帮助您。您能否重新表述?
+
+      elseActions:
+        - kind: BeginDialog
+          id: 5aXj5M
+          dialog: crcce_CampusCareerAgent.topic.Escalate

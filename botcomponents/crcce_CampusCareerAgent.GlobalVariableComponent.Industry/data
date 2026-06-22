@@ -1,0 +1,6 @@
+kind: Variable
+name: Industry
+scope: User
+isExternalInitializationAllowed: false
+isOutputToExternalCallers: false
+initializationTimeoutInMilliseconds: 0

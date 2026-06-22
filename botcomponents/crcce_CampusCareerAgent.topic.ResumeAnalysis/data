@@ -1,0 +1,68 @@
+kind: AdaptiveDialog
+modelDescription: Use when the user asks to analyze, review, score, improve, optimize, or modify a resume or CV, including resume analysis requests.
+beginDialog:
+  kind: OnRecognizedIntent
+  id: main
+  intent:
+    displayName: Resume Analysis
+    triggerQueries:
+      - analyze my resume
+      - optimize my resume
+      - resume analysis
+      - improve my CV
+      - CV modification
+
+  actions:
+    - kind: SendActivity
+      id: sendActivity_introResume
+      activity: I can help you prepare a resume review for a specific role. The AI Builder resume-analysis flow is not connected yet, so I will collect the role, JD, and resume text and give a practical checklist-style review.
+
+    - kind: Question
+      id: question_targetJob
+      interruptionPolicy:
+        allowInterruption: true
+
+      variable: Global.TargetJob
+      prompt: What job are you targeting? For example, "Product Management Intern at Tencent".
+      entity:
+        kind: StringPrebuiltEntity
+        sensitivityLevel: None
+
+    - kind: Question
+      id: question_jobDescription
+      interruptionPolicy:
+        allowInterruption: true
+
+      variable: Global.JobDescription
+      prompt: Paste the job description or the most important requirements.
+      entity:
+        kind: StringPrebuiltEntity
+        sensitivityLevel: None
+
+    - kind: Question
+      id: question_resumeText
+      interruptionPolicy:
+        allowInterruption: true
+
+      variable: Global.ResumeText
+      prompt: Paste the resume text you want to improve.
+      entity:
+        kind: StringPrebuiltEntity
+        sensitivityLevel: None
+
+    - kind: SendActivity
+      id: sendActivity_resumeChecklist
+      activity: |-
+        Resume review prepared for {Global.TargetJob}.
+
+        Focus your revision on these areas:
+        1. Mirror the JD language in your skills and experience bullets.
+        2. Put the most relevant project, internship, or coursework near the top.
+        3. Add measurable outcomes wherever possible: scope, tools, impact, or result.
+        4. Remove unrelated bullets so the first page reads as targeted to this role.
+        5. Save this role and JD so the AI Builder flow can generate a deeper score once it is connected.
+
+        Next step: ask for job opportunities, or ask me to prepare an application draft.
+
+inputType: {}
+outputType: {}

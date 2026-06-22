@@ -1,0 +1,11 @@
+kind: TaskDialog
+modelDisplayName: Work IQ User (Preview)
+action:
+  kind: InvokeExternalAgentTaskAction
+  connectionReference: crcce_CampusCareerAgent.shared_a365memcp.shared-a365memcp-e129bfb2-592b-48d5-ba43-25c6a16f5fef
+  connectionProperties:
+    mode: Invoker
+
+  operationDetails:
+    kind: ModelContextProtocolMetadata
+    operationId: mcp_MeServer

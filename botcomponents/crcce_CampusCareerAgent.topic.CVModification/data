@@ -1,0 +1,56 @@
+kind: AdaptiveDialog
+beginDialog:
+  kind: OnRecognizedIntent
+  id: main
+  intent:
+    displayName: CV Modification
+    triggerQueries:
+      - modify my CV
+      - rewrite my CV
+      - improve my CV
+      - CV modification
+      - polish my resume
+      - update my resume
+
+  actions:
+    - kind: SendActivity
+      id: sendActivity_cvIntro
+      activity: I can help you turn your resume into a stronger role-targeted CV. The automated AI rewrite flow is not connected yet, so I will collect your current CV and target role, then give a structured revision plan.
+
+    - kind: Question
+      id: question_cvTargetRole
+      interruptionPolicy:
+        allowInterruption: true
+
+      variable: Global.TargetJob
+      prompt: What role or internship should this CV target?
+      entity:
+        kind: StringPrebuiltEntity
+        sensitivityLevel: None
+
+    - kind: Question
+      id: question_cvText
+      interruptionPolicy:
+        allowInterruption: true
+
+      variable: Global.ResumeText
+      prompt: Paste your current CV or resume text.
+      entity:
+        kind: StringPrebuiltEntity
+        sensitivityLevel: None
+
+    - kind: SendActivity
+      id: sendActivity_cvPlan
+      activity: |-
+        CV modification plan for {Global.TargetJob}:
+
+        1. Rewrite the summary so the first sentence names the target role and strongest evidence.
+        2. Move the most relevant internship, project, or coursework above less relevant experience.
+        3. Convert task-based bullets into impact bullets using action + tool + result.
+        4. Add a skills line that mirrors the role requirements.
+        5. Keep the final version concise enough for a recruiter to scan in under one minute.
+
+        Once the AI Builder rewrite flow is added, this topic can generate the revised CV automatically.
+
+inputType: {}
+outputType: {}

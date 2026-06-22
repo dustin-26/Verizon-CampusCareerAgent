@@ -1,0 +1,23 @@
+<botcomponent_connectionreferenceset>
+  <botcomponent_connectionreference botcomponentid.schemaname="crcce_CampusCareerAgent.action.MicrosoftDataverse-MicrosoftDataverseMCPServerPreview" connectionreferenceid.connectionreferencelogicalname="crcce_CampusCareerAgent.shared_commondataserviceforapps.shared-commondataser-410556d8-0c74-4f63-ac20-f75a0adea7b0">
+    <iscustomizable>1</iscustomizable>
+  </botcomponent_connectionreference>
+  <botcomponent_connectionreference botcomponentid.schemaname="crcce_CampusCareerAgent.action.MicrosoftDataverse-MicrosoftDataverseMCPServerPreview_0gj" connectionreferenceid.connectionreferencelogicalname="crcce_CampusCareerAgent.shared_commondataserviceforapps.shared-commondataser-410556d8-0c74-4f63-ac20-f75a0adea7b0">
+    <iscustomizable>1</iscustomizable>
+  </botcomponent_connectionreference>
+  <botcomponent_connectionreference botcomponentid.schemaname="crcce_CampusCareerAgent.topic.v2_TrackApplications" connectionreferenceid.connectionreferencelogicalname="crcce_CampusCareerAgent.shared_commondataserviceforapps.shared-commondataser-410556d8-0c74-4f63-ac20-f75a0adea7b0">
+    <iscustomizable>1</iscustomizable>
+  </botcomponent_connectionreference>
+  <botcomponent_connectionreference botcomponentid.schemaname="crcce_CampusCareerAgent.topic.v2_ViewandApplyforAcativities" connectionreferenceid.connectionreferencelogicalname="crcce_CampusCareerAgent.shared_commondataserviceforapps.shared-commondataser-410556d8-0c74-4f63-ac20-f75a0adea7b0">
+    <iscustomizable>1</iscustomizable>
+  </botcomponent_connectionreference>
+  <botcomponent_connectionreference botcomponentid.schemaname="crcce_CampusCareerAgent.topic.ViewandApplyforPositions" connectionreferenceid.connectionreferencelogicalname="crcce_CampusCareerAgent.shared_commondataserviceforapps.shared-commondataser-410556d8-0c74-4f63-ac20-f75a0adea7b0">
+    <iscustomizable>1</iscustomizable>
+  </botcomponent_connectionreference>
+  <botcomponent_connectionreference botcomponentid.schemaname="crcce_CampusCareerAgent.topic.WorkIQCopilotPreview" connectionreferenceid.connectionreferencelogicalname="crcce_CampusCareerAgent.shared_a365copilotchatmcp.shared-a365copilotch-31e38da6-0f48-4857-8645-719c8c568d8c">
+    <iscustomizable>1</iscustomizable>
+  </botcomponent_connectionreference>
+  <botcomponent_connectionreference botcomponentid.schemaname="crcce_CampusCareerAgent.topic.WorkIQUserPreview" connectionreferenceid.connectionreferencelogicalname="crcce_CampusCareerAgent.shared_a365memcp.shared-a365memcp-e129bfb2-592b-48d5-ba43-25c6a16f5fef">
+    <iscustomizable>1</iscustomizable>
+  </botcomponent_connectionreference>
+</botcomponent_connectionreferenceset>

@@ -1,0 +1,12 @@
+<botcomponent schemaname="crcce_CampusCareerAgent.topic.EndofConversation">
+  <componenttype>9</componenttype>
+  <description>此系统主题仅由重定向操作触发，
+可指导用户对与智能体的对话进行评分。</description>
+  <iscustomizable>0</iscustomizable>
+  <name>对话结束</name>
+  <parentbotid>
+    <schemaname>crcce_CampusCareerAgent</schemaname>
+  </parentbotid>
+  <statecode>0</statecode>
+  <statuscode>1</statuscode>
+</botcomponent>

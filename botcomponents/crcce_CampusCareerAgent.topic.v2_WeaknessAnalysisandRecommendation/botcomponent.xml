@@ -1,0 +1,10 @@
+<botcomponent schemaname="crcce_CampusCareerAgent.topic.v2_WeaknessAnalysisandRecommendation">
+  <componenttype>9</componenttype>
+  <iscustomizable>0</iscustomizable>
+  <name>v2_Weakness Analysis and Recommendation</name>
+  <parentbotid>
+    <schemaname>crcce_CampusCareerAgent</schemaname>
+  </parentbotid>
+  <statecode>0</statecode>
+  <statuscode>1</statuscode>
+</botcomponent>

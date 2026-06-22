@@ -1,0 +1,24 @@
+kind: TaskDialog
+inputs:
+  - kind: AutomaticTaskInput
+    propertyName: BasicProfile
+    name: BasicProfile
+    shouldPromptUser: true
+
+  - kind: AutomaticTaskInput
+    propertyName: ChangeRequest
+    name: ChangeRequest
+    shouldPromptUser: true
+
+  - kind: AutomaticTaskInput
+    propertyName: CurrentResume
+    name: CurrentResume
+    shouldPromptUser: true
+
+modelDisplayName: Revise Student Resume
+modelDescription: Revise Student Resume
+action:
+  kind: InvokeAIBuilderModelTaskAction
+  aIModelId: 9818fbe1-6811-41ce-aca8-c75a5e5747be
+
+outputMode: All

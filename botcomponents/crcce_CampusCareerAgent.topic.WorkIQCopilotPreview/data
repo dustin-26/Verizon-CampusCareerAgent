@@ -1,0 +1,11 @@
+kind: TaskDialog
+modelDisplayName: Work IQ Copilot (Preview)
+action:
+  kind: InvokeExternalAgentTaskAction
+  connectionReference: crcce_CampusCareerAgent.shared_a365copilotchatmcp.shared-a365copilotch-31e38da6-0f48-4857-8645-719c8c568d8c
+  connectionProperties:
+    mode: Invoker
+
+  operationDetails:
+    kind: ModelContextProtocolMetadata
+    operationId: mcp_m365copilot

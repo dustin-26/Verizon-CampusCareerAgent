@@ -1,0 +1,11 @@
+<botcomponent schemaname="crcce_CampusCareerAgent.topic.CourseAdvice">
+  <componenttype>9</componenttype>
+  <description>Recommends courses based on student's school, target industry, and placement analytics. Maps career goals to specific course codes and semester offerings.</description>
+  <iscustomizable>0</iscustomizable>
+  <name>Course Advice</name>
+  <parentbotid>
+    <schemaname>crcce_CampusCareerAgent</schemaname>
+  </parentbotid>
+  <statecode>1</statecode>
+  <statuscode>2</statuscode>
+</botcomponent>

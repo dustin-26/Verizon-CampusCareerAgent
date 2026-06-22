@@ -1,0 +1,284 @@
+kind: AdaptiveDialog
+modelDescription: Build Resume From Scratch is a redirected-only subtopic. It uses confirmed profile variables from the setup topic, interviews the student for resume content, prepares a draft, lets the student review it, and saves only after confirmation.
+beginDialog:
+  kind: OnRedirect
+  id: main
+  actions:
+    - kind: SetVariable
+      id: setVariable_h1CWRx
+      variable: Topic.BasicProfileContext
+      value: |-
+        ="CONFIRMED BASIC PROFILE — DO NOT ASK THE USER FOR THESE DETAILS AGAIN"
+        &
+        Char(10) & Char(10)
+        &
+        "Name: " & Coalesce(Global.Name, "Not provided")
+        &
+        Char(10) & "Email: " & Coalesce(Global.Email, "Not provided")
+        &
+        Char(10) & "Phone: " & Coalesce(Global.Phone, "Not provided")
+        &
+        Char(10) & "Location: " & Coalesce(Global.Location, "Not provided")
+        &
+        Char(10) & "School: " & Coalesce(Global.School, "Not provided")
+        &
+        Char(10) & "Major: " & Coalesce(Global.Major, "Not provided")
+        &
+        Char(10) & "GPA: " & Coalesce(Global.Gpa, "Not provided")
+        &
+        Char(10) & "Target industry: " & Coalesce(Global.Industry, "Not provided")
+        &
+        Char(10) & "Target position: " & Coalesce(Global.Position, "Not provided")
+
+    - kind: SetVariable
+      id: setVariable_QDl8Ub
+      variable: Topic.ResumeBuildState
+      value: "EDUCATION DETAILS: - Degree type: Not collected - Expected graduation date: Not collected - Other education experiences: Not collected - Relevant coursework: Not collected - Academic achievements: Not collected  WORK EXPERIENCE: No information collected.  PROJECTS: No information collected.  LEADERSHIP AND ACTIVITIES: No information collected.  VOLUNTEERING: No information collected.  SKILLS AND LANGUAGES: No information collected.  AWARDS AND CERTIFICATIONS: No information collected."
+
+    - kind: SendActivity
+      id: sendActivity_raPqR2
+      activity: |-
+        Great — I already have your basic profile information。
+
+        Now I'll help you build the rest of your resume step by step. You can answer
+        naturally, and I'll ask one follow-up question at a time.
+
+    - kind: SetVariable
+      id: setVariable_PsJaFW
+      variable: Topic.NextQuestion
+      value: Let's complete your education section first.  I already have your school, major, and GPA. What degree are you pursuing, when do you expect to graduate, and do you have any other education experiences you'd like to include—such as an exchange programme, summer school, minor, additional major, or previous institution?  You can also mention relevant coursework or academic achievements if you'd like them included.
+
+    - kind: SetVariable
+      id: setVariable_lYHHp4
+      variable: Topic.LastQuestion
+      value: No question asked yet.
+
+    - kind: Question
+      id: question_U8X4D5
+      interruptionPolicy:
+        allowInterruption: false
+
+      alwaysPrompt: true
+      variable: init:Topic.LatestAnswer
+      prompt: "{Topic.NextQuestion}"
+      entity: StringPrebuiltEntity
+
+    - kind: InvokeAIBuilderModelAction
+      id: invokeAIBuilderModelAction_S7XjM2
+      input:
+        binding:
+          BasicProfile: =Topic.BasicProfileContext
+          CurrentResumeState: =Topic.ResumeBuildState
+          LastQuestion: =Topic.LastQuestion
+          LatestUserAnswer: =Topic.LatestAnswer
+
+      output:
+        binding:
+          predictionOutput: Topic.InterviewResult
+
+      aIModelId: b4e4655c-78a2-41b2-8988-7a3e95c9b53b
+
+    - kind: SetVariable
+      id: setVariable_ckD3Lj
+      variable: Topic.ResumeBuildState
+      value: =Topic.InterviewResult.structuredOutput.updatedState
+
+    - kind: ConditionGroup
+      id: conditionGroup_wZWaTW
+      conditions:
+        - id: conditionItem_KWyZcc
+          condition: =Topic.InterviewResult.structuredOutput.cancelRequested = true
+
+      elseActions:
+        - kind: ConditionGroup
+          id: conditionGroup_jtLbD5
+          conditions:
+            - id: conditionItem_eNprRc
+              condition: =Topic.InterviewResult.structuredOutput.readyToGenerate = true
+              actions:
+                - kind: InvokeAIBuilderModelAction
+                  id: invokeAIBuilderModelAction_Vl37rZ
+                  input:
+                    binding:
+                      BasicProfile: =Topic.BasicProfileContext
+                      ResumeState: =Topic.ResumeBuildState
+
+                  output:
+                    binding:
+                      predictionOutput: Topic.GeneratedResume
+
+                  aIModelId: 3d3b8f4c-1c82-4d5d-b128-ec2097981bf8
+
+                - kind: AdaptiveCardPrompt
+                  id: nHjXJq
+                  card: |-
+                    ={
+                        '$schema': "http://adaptivecards.io/schemas/adaptive-card.json",
+                        type: "AdaptiveCard",
+                        version: "1.5",
+                        body: [
+                            {
+                                type: "TextBlock",
+                                text: "Your resume draft",
+                                weight: "Bolder",
+                                size: "Large",
+                                wrap: true
+                            },
+                            {
+                                type: "TextBlock",
+                                text: "Review the draft below. Nothing has been saved yet.",
+                                wrap: true,
+                                isSubtle: true,
+                                spacing: "Small"
+                            },
+                            {
+                                type: "Container",
+                                spacing: "Medium",
+                                separator: true,
+                                items: [
+                                    {
+                                        type: "TextBlock",
+                                        text: Coalesce(
+                                            Topic.GeneratedResume.text,
+                                            "The resume draft could not be generated."
+                                        ),
+                                        wrap: true
+                                    }
+                                ]
+                            },
+                            {
+                                type: "TextBlock",
+                                text: "What would you like to do with this draft?",
+                                weight: "Bolder",
+                                wrap: true,
+                                spacing: "Medium"
+                            }
+                        ],
+                        actions: [
+                            {
+                                type: "Action.Submit",
+                                title: "Save This Resume",
+                                associatedInputs: "none",
+                                data: {
+                                    actionSubmitId: "resume_review_save_v1",
+                                    ResumeReviewAction: "save"
+                                }
+                            },
+                            {
+                                type: "Action.Submit",
+                                title: "Make Changes",
+                                associatedInputs: "none",
+                                data: {
+                                    actionSubmitId: "resume_review_modify_v1",
+                                    ResumeReviewAction: "modify"
+                                }
+                            },
+                            {
+                                type: "Action.Submit",
+                                title: "Discard",
+                                associatedInputs: "none",
+                                data: {
+                                    actionSubmitId: "resume_review_discard_v1",
+                                    ResumeReviewAction: "discard"
+                                }
+                            }
+                        ]
+                    }
+                  output:
+                    binding:
+                      ResumeReviewAction: Topic.ResumeReviewAction
+
+                  outputType:
+                    properties:
+                      ResumeReviewAction: String
+
+                - kind: ConditionGroup
+                  id: conditionGroup_JSnelS
+                  conditions:
+                    - id: conditionItem_inscNL
+                      condition: =Topic.ResumeReviewAction = "save"
+                      actions:
+                        - kind: SetVariable
+                          id: setVariable_1Og8G4
+                          variable: Global.Resume
+                          value: =Topic.GeneratedResume.text
+
+                        - kind: InvokeFlowAction
+                          id: invokeFlowAction_AWv0rT
+                          input:
+                            binding:
+                              text: =Global.ProfileId
+                              text_1: =Global.Gpa
+                              text_2: =Global.Industry
+                              text_3: =Global.Location
+                              text_4: =Global.Major
+                              text_5: =Global.Name
+                              text_6: =Global.Phone
+                              text_7: =Global.Position
+                              text_8: =Global.Resume
+                              text_9: =Global.School
+
+                          output:
+                            binding:
+                              status: Topic.Status
+
+                          flowId: 77b9dff9-aa2e-b3e0-0e8a-c50c0f5ec0d3
+
+                    - id: conditionItem_3BQHh6
+                      condition: =Topic.ResumeReviewAction = "modify"
+                      actions:
+                        - kind: Question
+                          id: question_0Yh3op
+                          interruptionPolicy:
+                            allowInterruption: true
+
+                          variable: init:Topic.ResumeChangeRequest
+                          prompt: Describe what you would like me to change.
+                          entity: StringPrebuiltEntity
+
+                        - kind: InvokeAIBuilderModelAction
+                          id: invokeAIBuilderModelAction_anjRKy
+                          input:
+                            binding:
+                              BasicProfile: =Topic.BasicProfileContext
+                              ChangeRequest: =Topic.ResumeChangeRequest
+                              CurrentResume: =Topic.GeneratedResume.text
+
+                          output:
+                            binding:
+                              predictionOutput: Topic.GeneratedResume
+
+                          aIModelId: 9818fbe1-6811-41ce-aca8-c75a5e5747be
+
+                        - kind: GotoAction
+                          id: DlpPnn
+                          actionId: nHjXJq
+
+                    - id: conditionItem_LcG7nL
+                      condition: =Topic.ResumeReviewAction = "discard"
+
+                  elseActions:
+                    - kind: GotoAction
+                      id: guLY6k
+                      actionId: nHjXJq
+
+          elseActions:
+            - kind: SetVariable
+              id: setVariable_966Oyv
+              variable: Topic.LastQuestion
+              value: =Topic.NextQuestion
+
+            - kind: SetVariable
+              id: setVariable_tAisGi
+              variable: Topic.NextQuestion
+              value: =Topic.InterviewResult.structuredOutput.assistantMessage
+
+            - kind: GotoAction
+              id: s3guxX
+              actionId: question_U8X4D5
+
+    - kind: EndDialog
+      id: fUdFZz
+
+inputType: {}
+outputType: {}

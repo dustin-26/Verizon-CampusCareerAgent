@@ -1,0 +1,29 @@
+<botcomponent_workflowset>
+  <botcomponent_workflow botcomponentid.schemaname="crcce_CampusCareerAgent.topic.BuildResumeFromScratch" workflowid.workflowid="77b9dff9-aa2e-b3e0-0e8a-c50c0f5ec0d3">
+    <iscustomizable>1</iscustomizable>
+  </botcomponent_workflow>
+  <botcomponent_workflow botcomponentid.schemaname="crcce_CampusCareerAgent.topic.gpT" workflowid.workflowid="e98a59ce-346a-f111-ab0b-70a8a59b0723">
+    <iscustomizable>1</iscustomizable>
+  </botcomponent_workflow>
+  <botcomponent_workflow botcomponentid.schemaname="crcce_CampusCareerAgent.topic.Greeting" workflowid.workflowid="4529a43e-206a-f111-ab0b-70a8a59b0723">
+    <iscustomizable>1</iscustomizable>
+  </botcomponent_workflow>
+  <botcomponent_workflow botcomponentid.schemaname="crcce_CampusCareerAgent.topic.Greeting" workflowid.workflowid="86339482-0b6a-f111-ab0b-70a8a59b0723">
+    <iscustomizable>1</iscustomizable>
+  </botcomponent_workflow>
+  <botcomponent_workflow botcomponentid.schemaname="crcce_CampusCareerAgent.topic.PlacementInsights" workflowid.workflowid="42e65cee-bb6b-f111-ab0d-70a8a59b0723">
+    <iscustomizable>1</iscustomizable>
+  </botcomponent_workflow>
+  <botcomponent_workflow botcomponentid.schemaname="crcce_CampusCareerAgent.topic.StudentProfileSetup_v2_lko" workflowid.workflowid="70b16b21-6e6c-f111-ab0d-70a8a59b0723">
+    <iscustomizable>1</iscustomizable>
+  </botcomponent_workflow>
+  <botcomponent_workflow botcomponentid.schemaname="crcce_CampusCareerAgent.topic.StudentProfileSetup_v2_lko" workflowid.workflowid="77b9dff9-aa2e-b3e0-0e8a-c50c0f5ec0d3">
+    <iscustomizable>1</iscustomizable>
+  </botcomponent_workflow>
+  <botcomponent_workflow botcomponentid.schemaname="crcce_CampusCareerAgent.topic.v2_WeaknessAnalysisandRecommendation" workflowid.workflowid="70b16b21-6e6c-f111-ab0d-70a8a59b0723">
+    <iscustomizable>1</iscustomizable>
+  </botcomponent_workflow>
+  <botcomponent_workflow botcomponentid.schemaname="crcce_CampusCareerAgent.topic.ViewandApplyforPositions" workflowid.workflowid="907fd7c8-bffb-a536-08d6-18c091adb5a3">
+    <iscustomizable>1</iscustomizable>
+  </botcomponent_workflow>
+</botcomponent_workflowset>

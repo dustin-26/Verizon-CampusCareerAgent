@@ -1,0 +1,10 @@
+<botcomponent schemaname="crcce_CampusCareerAgent.topic.TopicGuide_triggeredCopy">
+  <componenttype>9</componenttype>
+  <iscustomizable>0</iscustomizable>
+  <name>v2_Topic Guide_rediected</name>
+  <parentbotid>
+    <schemaname>crcce_CampusCareerAgent</schemaname>
+  </parentbotid>
+  <statecode>1</statecode>
+  <statuscode>2</statuscode>
+</botcomponent>

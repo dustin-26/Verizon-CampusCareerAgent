@@ -1,0 +1,10 @@
+<botcomponent schemaname="crcce_CampusCareerAgent.topic.v2_ViewandApplyforAcativities">
+  <componenttype>9</componenttype>
+  <iscustomizable>0</iscustomizable>
+  <name>v2_View and Apply for Activities</name>
+  <parentbotid>
+    <schemaname>crcce_CampusCareerAgent</schemaname>
+  </parentbotid>
+  <statecode>0</statecode>
+  <statuscode>1</statuscode>
+</botcomponent>

@@ -1,0 +1,289 @@
+{
+  "properties": {
+    "connectionReferences": {
+      "shared_commondataserviceforapps": {
+        "api": {
+          "name": "shared_commondataserviceforapps"
+        },
+        "connection": {
+          "connectionReferenceLogicalName": "new_sharedcommondataserviceforapps_12750"
+        },
+        "runtimeSource": "embedded"
+      }
+    },
+    "definition": {
+      "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+      "contentVersion": "1.0.0.0",
+      "actions": {
+        "List_rows_StudentProfile": {
+          "type": "OpenApiConnection",
+          "inputs": {
+            "parameters": {
+              "organization": "https://org4cd1be5d.crm.dynamics.com",
+              "entityName": "crcce_studentprofile_v2s",
+              "$select": "crcce_studentprofile_v2id,crcce_email,crcce_name,crcce_school,crcce_major,crcce_gpa,crcce_industry,crcce_location,crcce_phone,crcce_position,crcce_resume,modifiedon",
+              "$filter": "crcce_email eq '@{triggerBody()?['text']}'",
+              "$orderby": "modifiedon desc",
+              "$top": 1
+            },
+            "host": {
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+              "operationId": "ListRecordsWithOrganization",
+              "connectionName": "shared_commondataserviceforapps"
+            }
+          },
+          "runAfter": {}
+        },
+        "Condition": {
+          "type": "If",
+          "expression": {
+            "and": [
+              {
+                "greater": [
+                  "@length(body('List_rows_StudentProfile')?['value'])",
+                  "@0"
+                ]
+              }
+            ]
+          },
+          "actions": {
+            "Set_variable": {
+              "type": "SetVariable",
+              "inputs": {
+                "name": "ProfileFound",
+                "value": true
+              }
+            },
+            "Set_variable_1": {
+              "type": "SetVariable",
+              "inputs": {
+                "name": "ProfileRow",
+                "value": "@first(body('List_rows_StudentProfile')?['value'])"
+              },
+              "runAfter": {
+                "Set_variable": [
+                  "SUCCEEDED"
+                ]
+              }
+            }
+          },
+          "else": {
+            "actions": {
+              "Add_a_new_row_to_selected_environment": {
+                "type": "OpenApiConnection",
+                "inputs": {
+                  "parameters": {
+                    "organization": "https://org4cd1be5d.crm.dynamics.com",
+                    "entityName": "crcce_studentprofile_v2s",
+                    "item/crcce_email": "@triggerBody()?['text']"
+                  },
+                  "host": {
+                    "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+                    "operationId": "CreateRecordWithOrganization",
+                    "connectionName": "shared_commondataserviceforapps"
+                  }
+                }
+              }
+            }
+          },
+          "runAfter": {
+            "Initialize_variable_1": [
+              "SUCCEEDED"
+            ]
+          }
+        },
+        "Initialize_variable": {
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "ProfileFound",
+                "type": "boolean",
+                "value": false
+              }
+            ]
+          },
+          "runAfter": {
+            "List_rows_StudentProfile": [
+              "SUCCEEDED"
+            ]
+          }
+        },
+        "Initialize_variable_1": {
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "ProfileRow",
+                "type": "object",
+                "value": "@json('{}')"
+              }
+            ]
+          },
+          "runAfter": {
+            "Initialize_variable": [
+              "SUCCEEDED"
+            ]
+          }
+        },
+        "Respond_to_the_agent": {
+          "type": "Response",
+          "kind": "Skills",
+          "inputs": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "found": {
+                  "title": "Found",
+                  "description": "",
+                  "type": "boolean",
+                  "x-ms-content-hint": "BOOLEAN",
+                  "x-ms-dynamically-added": true
+                },
+                "email": {
+                  "title": "Email",
+                  "description": "",
+                  "type": "string",
+                  "x-ms-content-hint": "TEXT",
+                  "x-ms-dynamically-added": true
+                },
+                "name": {
+                  "title": "Name",
+                  "description": "",
+                  "type": "string",
+                  "x-ms-content-hint": "TEXT",
+                  "x-ms-dynamically-added": true
+                },
+                "school": {
+                  "title": "School",
+                  "description": "",
+                  "type": "string",
+                  "x-ms-content-hint": "TEXT",
+                  "x-ms-dynamically-added": true
+                },
+                "major": {
+                  "title": "Major",
+                  "description": "",
+                  "type": "string",
+                  "x-ms-content-hint": "TEXT",
+                  "x-ms-dynamically-added": true
+                },
+                "gpa": {
+                  "title": "GPA",
+                  "description": "",
+                  "type": "string",
+                  "x-ms-content-hint": "TEXT",
+                  "x-ms-dynamically-added": true
+                },
+                "industry": {
+                  "title": "Industry",
+                  "description": "",
+                  "type": "string",
+                  "x-ms-content-hint": "TEXT",
+                  "x-ms-dynamically-added": true
+                },
+                "location": {
+                  "title": "Location",
+                  "description": "",
+                  "type": "string",
+                  "x-ms-content-hint": "TEXT",
+                  "x-ms-dynamically-added": true
+                },
+                "phone": {
+                  "title": "Phone",
+                  "description": "",
+                  "type": "string",
+                  "x-ms-content-hint": "TEXT",
+                  "x-ms-dynamically-added": true
+                },
+                "position": {
+                  "title": "Position",
+                  "description": "",
+                  "type": "string",
+                  "x-ms-content-hint": "TEXT",
+                  "x-ms-dynamically-added": true
+                },
+                "resume": {
+                  "title": "Resume",
+                  "description": "",
+                  "type": "string",
+                  "x-ms-content-hint": "TEXT",
+                  "x-ms-dynamically-added": true
+                },
+                "profileid": {
+                  "title": "ProfileId",
+                  "description": "",
+                  "type": "string",
+                  "x-ms-content-hint": "TEXT",
+                  "x-ms-dynamically-added": true
+                }
+              },
+              "additionalProperties": {}
+            },
+            "statusCode": 200,
+            "body": {
+              "found": "@variables('ProfileFound')",
+              "email": "@{coalesce(\n  variables('ProfileRow')?['crcce_email'],\n  ''\n)}",
+              "name": "@{coalesce(\n  variables('ProfileRow')?['crcce_name'],\n  ''\n)}",
+              "school": "@{coalesce(\n  variables('ProfileRow')?['crcce_school'],\n  ''\n)}",
+              "major": "@{coalesce(\n  variables('ProfileRow')?['crcce_major'],\n  ''\n)}",
+              "gpa": "@{if(\n  empty(variables('ProfileRow')?['crcce_gpa']),\n  '',\n  string(variables('ProfileRow')?['crcce_gpa'])\n)}",
+              "industry": "@{coalesce(\n  variables('ProfileRow')?['crcce_industry'],\n  ''\n)}",
+              "location": "@{coalesce(\n  variables('ProfileRow')?['crcce_location'],\n  ''\n)}",
+              "phone": "@{coalesce(\n  variables('ProfileRow')?['crcce_phone'],\n  ''\n)}",
+              "position": "@{coalesce(\n  variables('ProfileRow')?['crcce_position'],\n  ''\n)}",
+              "resume": "@{coalesce(\n  variables('ProfileRow')?['crcce_resume'],\n  ''\n)}",
+              "profileid": "@{coalesce(\n  variables('ProfileRow')?['crcce_studentprofile_v2id'],\n  ''\n)}"
+            }
+          },
+          "runAfter": {
+            "Condition": [
+              "SUCCEEDED"
+            ]
+          }
+        }
+      },
+      "triggers": {
+        "manual": {
+          "type": "Request",
+          "kind": "Skills",
+          "inputs": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "text": {
+                  "description": "Get the user's email.",
+                  "title": "Email",
+                  "type": "string",
+                  "x-ms-content-hint": "TEXT",
+                  "x-ms-dynamically-added": true
+                }
+              },
+              "required": [
+                "text"
+              ]
+            }
+          },
+          "metadata": {
+            "flowSystemMetadata": {
+              "flowKind": "Stateless"
+            }
+          }
+        }
+      },
+      "parameters": {
+        "$authentication": {
+          "defaultValue": {},
+          "type": "SecureObject"
+        },
+        "$connections": {
+          "defaultValue": {},
+          "type": "Object"
+        }
+      },
+      "outputs": {}
+    },
+    "templateName": null
+  },
+  "schemaVersion": "1.0.0.0"
+}

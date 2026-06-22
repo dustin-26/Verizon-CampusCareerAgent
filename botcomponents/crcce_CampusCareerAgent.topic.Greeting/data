@@ -1,0 +1,376 @@
+kind: AdaptiveDialog
+modelDescription: |-
+  Only triggers this topic when the user:
+  - inputs "/setup"; or
+  - explicitly asks to set up or create their student profile (NOT for updating).
+beginDialog:
+  kind: OnRecognizedIntent
+  id: main
+  intent:
+    displayName: 问候语
+    includeInOnSelectIntent: false
+    triggerQueries:
+      - hi
+      - hello
+      - hey
+      - good morning
+      - good afternoon
+      - good evening
+      - start profile
+      - set up my student profile
+      - update my student profile
+      - create my career profile
+
+  actions:
+    - kind: InvokeFlowAction
+      id: invokeFlowAction_GJpHRM
+      input:
+        binding:
+          text: =System.User.Email
+
+      output:
+        binding:
+          profilestudentname: Topic.ProfileStudentName
+          profilestudentschool: Topic.ProfileStudentSchool
+          profiletargetcity: Topic.ProfileTargetCity
+          profiletargetindustry: Topic.ProfileTargetIndustry
+          status: Topic.Var2
+
+      flowId: 4529a43e-206a-f111-ab0b-70a8a59b0723
+
+    - kind: ConditionGroup
+      id: conditionGroup_5mJHfN
+      conditions:
+        - id: conditionItem_e5pw0w
+          condition: =Topic.Var2 = "Found"
+          actions:
+            - kind: SetVariable
+              id: setFoundProfileIndustry
+              variable: Global.TargetIndustry
+              value: =Blank()
+
+            - kind: SetVariable
+              id: setFoundProfileCity
+              variable: Global.TargetCity
+              value: =Blank()
+
+            - kind: SetVariable
+              id: setFoundProfileName
+              variable: Global.StudentName
+              value: =Topic.ProfileStudentName
+
+            - kind: SetVariable
+              id: setFoundProfileSchool
+              variable: Global.StudentSchool
+              value: =Topic.ProfileStudentSchool
+
+            - kind: SendActivity
+              id: sendActivity_XFj86C
+              activity: "Welcome back! Your profile is already set up. Ask me: \"Any new opportunities?\""
+
+      elseActions:
+        - kind: SendActivity
+          id: OzAIe8
+          activity: Welcome! I'm your Campus Career Agent.
+
+        - kind: Question
+          id: wzfnU9
+          interruptionPolicy:
+            allowInterruption: true
+
+          variable: Global.HasResume
+          prompt: Before we get started — do you have a resume?
+          entity:
+            kind: StringPrebuiltEntity
+            sensitivityLevel: None
+
+        - kind: ConditionGroup
+          id: 02Q8U4
+          conditions:
+            - id: chdWUn
+              condition: =Global.HasResume in "yes" || Global.HasResume in "upload"
+              actions:
+                - kind: Question
+                  id: VTGsT5
+                  interruptionPolicy:
+                    allowInterruption: true
+
+                  variable: Global.ResumeText
+                  prompt: Paste your resume text here
+                  entity:
+                    kind: StringPrebuiltEntity
+                    sensitivityLevel: None
+
+                - kind: Question
+                  id: HaUM7c
+                  interruptionPolicy:
+                    allowInterruption: true
+
+                  variable: Global.TargetIndustry
+                  prompt: Got it. What industry are you targeting? (e.g. Technology, Finance, Consulting, FMCG, Education)
+                  entity:
+                    kind: StringPrebuiltEntity
+                    sensitivityLevel: None
+
+                - kind: Question
+                  id: E5Esd2
+                  interruptionPolicy:
+                    allowInterruption: true
+
+                  variable: Global.TargetCity
+                  prompt: Which city are you targeting for your career?
+                  entity:
+                    kind: StringPrebuiltEntity
+                    sensitivityLevel: None
+
+                - kind: SetVariable
+                  id: mr3kya
+                  variable: Global.StudentName
+                  value: "[Will be extracted from resume]"
+
+                - kind: SetVariable
+                  id: ot4Zdh
+                  variable: Global.StudentSchool
+                  value: "[Will be extracted from resume]"
+
+                - kind: SetVariable
+                  id: CuIPPd
+                  variable: Global.Major
+                  value: "[Will be extracted from resume]"
+
+                - kind: SetVariable
+                  id: 8yuXXZ
+                  variable: Global.GPA
+                  value: 0
+
+                - kind: InvokeFlowAction
+                  id: invokeFlowAction_SaveResumeProfile
+                  input:
+                    binding:
+                      boolean: =true
+                      number: =Global.GPA
+                      text: =Global.StudentName
+                      text_1: =Global.StudentSchool
+                      text_2: =Global.Major
+                      text_3: =Global.TargetIndustry
+                      text_4: =Global.TargetCity
+                      text_5: =""
+                      text_6: =System.User.Email
+                      text_7: =Global.ResumeText
+
+                  flowId: 86339482-0b6a-f111-ab0b-70a8a59b0723
+
+                - kind: SendActivity
+                  id: QCAbR2
+                  activity: |-
+                    ✅ Resume saved! Here's your profile summary:
+                    Name: [Will be extracted from your resume]
+                    Industry: {Global.TargetIndustry}
+                    City: {Global.TargetCity}
+                    Your resume is stored and ready for optimization. When you find a role you like, ask me to analyze your resume for that position. In the meantime — "Any new opportunities?"
+
+            - id: yBv4G2
+              condition: =Global.HasResume in "no" || Global.HasResume = "scratch"
+              actions:
+                - kind: SendActivity
+                  id: PzqttP
+                  activity: No problem! Let me help you build your profile from scratch. Please fill in the card below.
+
+                - kind: AdaptiveCardPrompt
+                  id: dwHCRP
+                  card: |-
+                    {
+                      "type": "AdaptiveCard",
+                      "body": [
+                        {
+                          "type": "TextBlock",
+                          "text": "Build Your Career Profile",
+                          "size": "Large",
+                          "weight": "Bolder"
+                        },
+                        {
+                          "type": "TextBlock",
+                          "text": "Fill in the details below. You can update anytime.",
+                          "wrap": true,
+                          "spacing": "Small"
+                        },
+                        {
+                          "type": "Input.Text",
+                          "id": "name",
+                          "placeholder": "Your full name",
+                          "label": "Full Name"
+                        },
+                        {
+                          "type": "Input.Text",
+                          "id": "school",
+                          "placeholder": "e.g. HKUST, HKU, CUHK",
+                          "label": "School"
+                        },
+                        {
+                          "type": "Input.Text",
+                          "id": "major",
+                          "placeholder": "e.g. Computer Science, Finance",
+                          "label": "Major"
+                        },
+                        {
+                          "type": "Input.Number",
+                          "id": "gpa",
+                          "placeholder": "e.g. 3.5",
+                          "label": "GPA (estimate is OK)"
+                        },
+                        {
+                          "type": "Input.ChoiceSet",
+                          "id": "industry",
+                          "label": "Target Industry (select all that apply)",
+                          "isMultiSelect": true,
+                          "choices": [
+                            {
+                              "title": "Technology / Internet",
+                              "value": "Technology"
+                            },
+                            {
+                              "title": "Finance / Banking",
+                              "value": "Finance"
+                            },
+                            {
+                              "title": "Consulting",
+                              "value": "Consulting"
+                            },
+                            {
+                              "title": "FMCG / Retail",
+                              "value": "FMCG"
+                            },
+                            {
+                              "title": "Education",
+                              "value": "Education"
+                            },
+                            {
+                              "title": "Other",
+                              "value": "Other"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "Input.Text",
+                          "id": "otherIndustry",
+                          "placeholder": "If you selected 'Other', specify your industry",
+                          "label": "Other Industry (optional)"
+                        },
+                        {
+                          "type": "Input.Text",
+                          "id": "city",
+                          "placeholder": "e.g. Hong Kong, Shenzhen, Singapore",
+                          "label": "Target City"
+                        }
+                      ],
+                      "actions": [
+                        {
+                          "type": "Action.Submit",
+                          "title": "Save Profile",
+                          "style": "positive"
+                        }
+                      ],
+                      "$schema": "https://adaptivecards.io/schemas/adaptive-card.json",
+                      "version": "1.5"
+                    }
+                  output:
+                    binding:
+                      actionSubmitId: Topic.actionSubmitId
+                      city: Topic.city
+                      gpa: Topic.gpa
+                      industry: Topic.industry
+                      major: Topic.major
+                      name: Topic.name
+                      otherIndustry: Topic.otherIndustry
+                      school: Topic.school
+
+                  outputType:
+                    properties:
+                      actionSubmitId: String
+                      city: String
+                      gpa: Number
+                      industry:
+                        type:
+                          kind: Table
+                          properties:
+                            Value: String
+
+                      major: String
+                      name: String
+                      otherIndustry: String
+                      school: String
+
+                - kind: SetVariable
+                  id: 9zQ2LZ
+                  variable: Global.StudentName
+                  value: =Topic.name
+
+                - kind: SetVariable
+                  id: 01sx0R
+                  variable: Global.StudentSchool
+                  value: =Topic.school
+
+                - kind: SetVariable
+                  id: 5AghUv
+                  variable: Global.Major
+                  value: =Topic.major
+
+                - kind: SetVariable
+                  id: PajnvU
+                  variable: Global.GPA
+                  value: =Topic.gpa
+
+                - kind: SetVariable
+                  id: jbueFK
+                  variable: Global.TargetIndustry
+                  value: =Concat(Topic.industry, Value, ", ")
+
+                - kind: SetVariable
+                  id: Q7999X
+                  variable: Global.OtherIndustry
+                  value: =Topic.otherIndustry
+
+                - kind: ConditionGroup
+                  id: BG1Bdf
+                  conditions:
+                    - id: OI3FQW
+                      condition: =!IsBlank(Global.OtherIndustry)
+                      actions:
+                        - kind: SetVariable
+                          id: dLQLtU
+                          variable: Global.TargetIndustry
+                          value: =Substitute(Global.TargetIndustry, "Other", Global.OtherIndustry)
+
+                - kind: SetVariable
+                  id: TPATWF
+                  variable: Global.TargetCity
+                  value: =Topic.city
+
+                - kind: InvokeFlowAction
+                  id: invokeFlowAction_SaveCardProfile
+                  input:
+                    binding:
+                      boolean: =false
+                      number: =Global.GPA
+                      text: =Global.StudentName
+                      text_1: =Global.StudentSchool
+                      text_2: =Global.Major
+                      text_3: =Global.TargetIndustry
+                      text_4: =Global.TargetCity
+                      text_5: =Global.OtherIndustry
+                      text_6: =System.User.Email
+                      text_7: =""
+
+                  flowId: 86339482-0b6a-f111-ab0b-70a8a59b0723
+
+                - kind: SendActivity
+                  id: VrN7W0
+                  activity: |-
+                    ✅ Profile saved! Here's your summary:
+                    Name: {Global.StudentName}
+                    School: {Global.StudentSchool}
+                    Major: {Global.Major}
+                    GPA: {Global.GPA}
+                    Target Industry:{Global.TargetIndustry}
+                    Target City: {Global.TargetCity}
+                    From now on, I'll track {Global.TargetIndustry} opportunities in {Global.TargetCity} for you. Ask me anytime: "Any new opportunities?"

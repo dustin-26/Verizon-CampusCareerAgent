@@ -1,0 +1,13 @@
+<botcomponent schemaname="crcce_CampusCareerAgent.topic.StudentProfileSetup_v2_lko">
+  <componenttype>9</componenttype>
+  <description>This is the FIRST topic every user must go through. Triggered when a user greets, says hi, hello, yes, starts a conversation, or appears for the first time. It collects the student's career profile via an
+  adaptive card and stores all profile variables. This topic should ALWAYS be activated before any other topic.
+ALWAYS activate this topic when a user sends any greeting or first message. This is the mandatory entry point</description>
+  <iscustomizable>0</iscustomizable>
+  <name>v2_Student Profile Setup</name>
+  <parentbotid>
+    <schemaname>crcce_CampusCareerAgent</schemaname>
+  </parentbotid>
+  <statecode>0</statecode>
+  <statuscode>1</statuscode>
+</botcomponent>

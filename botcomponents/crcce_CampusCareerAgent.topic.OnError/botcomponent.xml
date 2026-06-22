@@ -1,0 +1,11 @@
+<botcomponent schemaname="crcce_CampusCareerAgent.topic.OnError">
+  <componenttype>9</componenttype>
+  <description>当智能体遇到错误时，会触发此系统主题。使用测试聊天窗格时，会显示完整的错误描述。</description>
+  <iscustomizable>0</iscustomizable>
+  <name>出错时</name>
+  <parentbotid>
+    <schemaname>crcce_CampusCareerAgent</schemaname>
+  </parentbotid>
+  <statecode>0</statecode>
+  <statuscode>1</statuscode>
+</botcomponent>

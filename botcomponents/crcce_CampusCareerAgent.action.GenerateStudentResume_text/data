@@ -1,0 +1,19 @@
+kind: TaskDialog
+inputs:
+  - kind: AutomaticTaskInput
+    propertyName: BasicProfile
+    name: BasicProfile
+    shouldPromptUser: true
+
+  - kind: AutomaticTaskInput
+    propertyName: ResumeState
+    name: ResumeState
+    shouldPromptUser: true
+
+modelDisplayName: Generate Student Resume_text
+modelDescription: Generate Student Resume_text
+action:
+  kind: InvokeAIBuilderModelTaskAction
+  aIModelId: 3d3b8f4c-1c82-4d5d-b128-ec2097981bf8
+
+outputMode: All

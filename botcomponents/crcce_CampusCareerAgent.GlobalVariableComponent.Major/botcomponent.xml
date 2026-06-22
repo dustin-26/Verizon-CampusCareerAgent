@@ -1,0 +1,11 @@
+<botcomponent schemaname="crcce_CampusCareerAgent.GlobalVariableComponent.Major">
+  <componenttype>12</componenttype>
+  <description> Academic major     </description>
+  <iscustomizable>0</iscustomizable>
+  <name>Major</name>
+  <parentbotid>
+    <schemaname>crcce_CampusCareerAgent</schemaname>
+  </parentbotid>
+  <statecode>0</statecode>
+  <statuscode>1</statuscode>
+</botcomponent>

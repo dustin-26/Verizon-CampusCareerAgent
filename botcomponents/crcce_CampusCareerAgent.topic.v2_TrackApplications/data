@@ -1,0 +1,577 @@
+kind: AdaptiveDialog
+modelDescription: |-
+  This topic should be triggered when the user asks for:
+  - /track; or
+  - Explicitly ask for tracking application progress.
+beginDialog:
+  kind: OnRecognizedIntent
+  id: main
+  intent: {}
+  actions:
+    - kind: SendActivity
+      id: sendActivity_cpBiQ9
+      activity: Let's check your progress...
+
+    - kind: InvokeConnectorAction
+      id: invokeConnectorAction_XRt6DF
+      input:
+        binding:
+          $filter: |-
+            =Concatenate(
+                "crcce_useremail eq '",
+                System.User.Email,
+                "' and crcce_applicationstatus ne 'New Opportunity'",
+                " and crcce_applicationstatus ne 'Dislike'"
+            )
+          $orderby: modifiedon desc
+          $select: crcce_jobid, crcce_job1, crcce_companyname, crcce_appliedon, crcce_applicationstatus, modifiedon
+          $top: 3
+          entityName: crcce_jobs
+          organization: https://org4cd1be5d.crm.dynamics.com
+
+      output:
+        kind: SingleVariableOutputBinding
+        variable: Topic.ListRecordsWithOrganization
+
+      connectionReference: crcce_CampusCareerAgent.shared_commondataserviceforapps.shared-commondataser-410556d8-0c74-4f63-ac20-f75a0adea7b0
+      connectionProperties:
+        name: crcce_CampusCareerAgent.shared_commondataserviceforapps.shared-commondataser-410556d8-0c74-4f63-ac20-f75a0adea7b0
+        mode: Maker
+
+      dynamicOutputSchema:
+        kind: Record
+        properties:
+          "@odata.nextLink":
+            displayName: Next link
+            description: The url to fetch next page data.
+            visibility: Advanced
+            order: 1
+            type: String
+
+          value:
+            order: 0
+            type:
+              kind: Table
+              properties:
+                _createdby_value:
+                  displayName: Created By (Value)
+                  description: Unique identifier of the user who created the record.
+                  visibility: Advanced
+                  order: 9
+                  type: String
+
+                _createdby_value@Microsoft.Dynamics.CRM.lookuplogicalname:
+                  displayName: Created By (Type)
+                  description: Unique identifier of the user who created the record.
+                  visibility: Advanced
+                  order: 8
+                  type: String
+
+                _createdonbehalfby_value:
+                  displayName: Created By (Delegate) (Value)
+                  description: Unique identifier of the delegate user who created the record.
+                  visibility: Advanced
+                  order: 7
+                  type: String
+
+                _createdonbehalfby_value@Microsoft.Dynamics.CRM.lookuplogicalname:
+                  displayName: Created By (Delegate) (Type)
+                  description: Unique identifier of the delegate user who created the record.
+                  visibility: Advanced
+                  order: 6
+                  type: String
+
+                _modifiedby_value:
+                  displayName: Modified By (Value)
+                  description: Unique identifier of the user who modified the record.
+                  visibility: Advanced
+                  order: 22
+                  type: String
+
+                _modifiedby_value@Microsoft.Dynamics.CRM.lookuplogicalname:
+                  displayName: Modified By (Type)
+                  description: Unique identifier of the user who modified the record.
+                  visibility: Advanced
+                  order: 21
+                  type: String
+
+                _modifiedonbehalfby_value:
+                  displayName: Modified By (Delegate) (Value)
+                  description: Unique identifier of the delegate user who modified the record.
+                  visibility: Advanced
+                  order: 20
+                  type: String
+
+                _modifiedonbehalfby_value@Microsoft.Dynamics.CRM.lookuplogicalname:
+                  displayName: Modified By (Delegate) (Type)
+                  description: Unique identifier of the delegate user who modified the record.
+                  visibility: Advanced
+                  order: 19
+                  type: String
+
+                _ownerid_value:
+                  displayName: Owner (Value)
+                  description: Owner Id
+                  visibility: Advanced
+                  order: 26
+                  type: String
+
+                _ownerid_value@Microsoft.Dynamics.CRM.lookuplogicalname:
+                  displayName: Owner (Type)
+                  description: Owner Id
+                  visibility: Advanced
+                  order: 25
+                  type: String
+
+                _owningbusinessunit_value:
+                  displayName: Owning Business Unit (Value)
+                  description: Unique identifier for the business unit that owns the record
+                  visibility: Advanced
+                  order: 28
+                  type: String
+
+                _owningbusinessunit_value@Microsoft.Dynamics.CRM.lookuplogicalname:
+                  displayName: Owning Business Unit (Type)
+                  description: Unique identifier for the business unit that owns the record
+                  visibility: Advanced
+                  order: 27
+                  type: String
+
+                _owningteam_value:
+                  displayName: Owning Team (Value)
+                  description: Unique identifier for the team that owns the record.
+                  visibility: Advanced
+                  order: 30
+                  type: String
+
+                _owningteam_value@Microsoft.Dynamics.CRM.lookuplogicalname:
+                  displayName: Owning Team (Type)
+                  description: Unique identifier for the team that owns the record.
+                  visibility: Advanced
+                  order: 29
+                  type: String
+
+                _owninguser_value:
+                  displayName: Owning User (Value)
+                  description: Unique identifier for the user that owns the record.
+                  visibility: Advanced
+                  order: 32
+                  type: String
+
+                _owninguser_value@Microsoft.Dynamics.CRM.lookuplogicalname:
+                  displayName: Owning User (Type)
+                  description: Unique identifier for the user that owns the record.
+                  visibility: Advanced
+                  order: 31
+                  type: String
+
+                "@odata.id":
+                  displayName: OData Id
+                  description: OData row id
+                  order: 24
+                  type: String
+
+                crcce_applicationemail:
+                  displayName: Application Email
+                  visibility: Advanced
+                  order: 0
+                  type: String
+
+                crcce_applicationlink:
+                  displayName: Application Link
+                  visibility: Advanced
+                  order: 1
+                  type: String
+
+                crcce_applicationmethod:
+                  displayName: Application Method
+                  visibility: Advanced
+                  order: 2
+                  type: String
+
+                crcce_applicationstatus:
+                  displayName: Application Status
+                  order: 3
+                  type: String
+
+                crcce_appliedon:
+                  displayName: Applied On
+                  visibility: Advanced
+                  order: 4
+                  type: DateTime
+
+                crcce_companyname:
+                  displayName: Company Name
+                  visibility: Advanced
+                  order: 5
+                  type: String
+
+                crcce_deadline:
+                  displayName: Deadline
+                  visibility: Advanced
+                  order: 11
+                  type: DateTime
+
+                crcce_job1:
+                  displayName: Job Title
+                  visibility: Advanced
+                  order: 15
+                  type: String
+
+                crcce_jobdescriptionrequirements:
+                  displayName: Job Description & Requirements
+                  visibility: Advanced
+                  order: 14
+                  type: String
+
+                crcce_jobid:
+                  displayName: Job
+                  description: Unique identifier for entity instances
+                  visibility: Advanced
+                  order: 13
+                  type: String
+
+                crcce_location:
+                  displayName: Location
+                  visibility: Advanced
+                  order: 16
+                  type: String
+
+                crcce_matchreason:
+                  displayName: Match Reason
+                  visibility: Advanced
+                  order: 17
+                  type: String
+
+                crcce_matchscore:
+                  displayName: Match Score
+                  visibility: Advanced
+                  order: 18
+                  type: Number
+
+                crcce_useremail:
+                  displayName: User Email
+                  order: 37
+                  type: String
+
+                createdon:
+                  displayName: Created On
+                  description: Date and time when the record was created.
+                  visibility: Advanced
+                  order: 10
+                  type: DateTime
+
+                importsequencenumber:
+                  displayName: Import Sequence Number
+                  description: Sequence number of the import that created this record.
+                  visibility: Advanced
+                  order: 12
+                  type: Number
+
+                modifiedon:
+                  displayName: Modified On
+                  description: Date and time when the record was modified.
+                  visibility: Advanced
+                  order: 23
+                  type: DateTime
+
+                overriddencreatedon:
+                  displayName: Record Created On
+                  description: Date and time that the record was migrated.
+                  visibility: Advanced
+                  order: 33
+                  type: DateTime
+
+                statecode:
+                  displayName: Status
+                  description: Status of the Job
+                  visibility: Advanced
+                  order: 34
+                  dynamicValuesConfig:
+                    capability: List
+
+                  type: Number
+
+                statuscode:
+                  displayName: Status Reason
+                  description: Reason for the status of the Job
+                  visibility: Advanced
+                  order: 35
+                  dynamicValuesConfig:
+                    capability: List
+
+                  type: Number
+
+                timezoneruleversionnumber:
+                  displayName: Time Zone Rule Version Number
+                  description: For internal use only.
+                  visibility: Advanced
+                  order: 36
+                  type: Number
+
+                utcconversiontimezonecode:
+                  displayName: UTC Conversion Time Zone Code
+                  description: Time zone code that was in use when the record was created.
+                  visibility: Advanced
+                  order: 38
+                  type: Number
+
+                versionnumber:
+                  displayName: Version Number
+                  description: Version Number
+                  visibility: Advanced
+                  order: 39
+                  type: Number
+
+      operationId: ListRecordsWithOrganization
+
+    - kind: SetVariable
+      id: aDljpp
+      variable: Topic.JobTable
+      value: |-
+        =FirstN(
+            Topic.ListRecordsWithOrganization.value,
+            3
+        )
+
+    - kind: SetVariable
+      id: setVariable_MRqm4N
+      variable: Topic.JobCount
+      value: =CountRows(Topic.JobTable)
+
+    - kind: ConditionGroup
+      id: conditionGroup_7ZnzsX
+      conditions:
+        - id: conditionItem_9WzKDE
+          condition: =Topic.JobCount = 0
+          actions:
+            - kind: SendActivity
+              id: sendActivity_35Lg7i
+              activity: You currently have no applications. Check for new ones?
+
+      elseActions:
+        - kind: SetMultipleVariables
+          id: kYAOL2
+          assignments:
+            - variable: Topic.Job1
+              value: =First(Topic.JobTable)
+
+            - variable: Topic.Job2
+              value: |-
+                =If(
+                    Topic.JobCount >= 2,
+                    Index(Topic.JobTable, 2),
+                    First(Topic.JobTable)
+                )
+
+            - variable: Topic.Job3
+              value: |-
+                =If(
+                    Topic.JobCount >= 3,
+                    Index(Topic.JobTable, 3),
+                    First(Topic.JobTable)
+                )
+
+        - kind: SendActivity
+          id: sendActivity_Hya96H
+          activity:
+            text:
+              - Here's your application status. Good luck!
+            attachments:
+              - kind: AdaptiveCardTemplate
+                cardContent: |-
+                  ={
+                      '$schema': "https://adaptivecards.io/schemas/adaptive-card.json",
+                      type: "AdaptiveCard",
+                      version: "1.5",
+
+                      body: [
+                          {
+                              type: "TextBlock",
+                              text: "Application Job",
+                              weight: "Bolder",
+                              size: "Large",
+                              wrap: true
+                          },
+                          {
+                              type: "TextBlock",
+                              text: Concatenate(
+                                  Text(Topic.JobCount),
+                                  If(
+                                      Topic.JobCount = 1,
+                                      " recent application update",
+                                      " recent application updates"
+                                  )
+                              ),
+                              wrap: true,
+                              isSubtle: true,
+                              spacing: "Small"
+                          },
+
+                          {
+                              type: "Container",
+                              isVisible: Topic.JobCount >= 1,
+                              separator: true,
+                              spacing: "Medium",
+
+                              items: [
+                                  {
+                                      type: "TextBlock",
+                                      text: Coalesce(
+                                          Topic.Job1.crcce_job1,
+                                          "Untitled position"
+                                      ),
+                                      weight: "Bolder",
+                                      size: "Medium",
+                                      wrap: true
+                                  },
+                                  {
+                                      type: "FactSet",
+                                      facts: [
+                                          {
+                                              title: "Company",
+                                              value: Coalesce(
+                                                  Topic.Job1.crcce_companyname,
+                                                  "Not specified"
+                                              )
+                                          },
+                                          {
+                                              title: "Applied on",
+                                              value: If(
+                                                  IsBlank(
+                                                      Topic.Job1.crcce_appliedon
+                                                  ),
+                                                  "Not recorded",
+                                                  Text(
+                                                      Topic.Job1.crcce_appliedon,
+                                                      "yyyy-mm-dd"
+                                                  )
+                                              )
+                                          },
+                                          {
+                                              title: "Status",
+                                              value: Coalesce(
+                                                  Topic.Job1.crcce_applicationstatus,
+                                                  "Not specified"
+                                              )
+                                          }
+                                      ]
+                                  }
+                              ]
+                          },
+
+                          {
+                              type: "Container",
+                              isVisible: Topic.JobCount >= 2,
+                              separator: true,
+                              spacing: "Medium",
+
+                              items: [
+                                  {
+                                      type: "TextBlock",
+                                      text: Coalesce(
+                                          Topic.Job2.crcce_job1,
+                                          "Untitled position"
+                                      ),
+                                      weight: "Bolder",
+                                      size: "Medium",
+                                      wrap: true
+                                  },
+                                  {
+                                      type: "FactSet",
+                                      facts: [
+                                          {
+                                              title: "Company",
+                                              value: Coalesce(
+                                                  Topic.Job2.crcce_companyname,
+                                                  "Not specified"
+                                              )
+                                          },
+                                          {
+                                              title: "Applied on",
+                                              value: If(
+                                                  IsBlank(
+                                                      Topic.Job2.crcce_appliedon
+                                                  ),
+                                                  "Not recorded",
+                                                  Text(
+                                                      Topic.Job2.crcce_appliedon,
+                                                      "yyyy-mm-dd"
+                                                  )
+                                              )
+                                          },
+                                          {
+                                              title: "Status",
+                                              value: Coalesce(
+                                                  Topic.Job2.crcce_applicationstatus,
+                                                  "Not specified"
+                                              )
+                                          }
+                                      ]
+                                  }
+                              ]
+                          },
+
+                          {
+                              type: "Container",
+                              isVisible: Topic.JobCount >= 3,
+                              separator: true,
+                              spacing: "Medium",
+
+                              items: [
+                                  {
+                                      type: "TextBlock",
+                                      text: Coalesce(
+                                          Topic.Job3.crcce_job1,
+                                          "Untitled position"
+                                      ),
+                                      weight: "Bolder",
+                                      size: "Medium",
+                                      wrap: true
+                                  },
+                                  {
+                                      type: "FactSet",
+                                      facts: [
+                                          {
+                                              title: "Company",
+                                              value: Coalesce(
+                                                  Topic.Job3.crcce_companyname,
+                                                  "Not specified"
+                                              )
+                                          },
+                                          {
+                                              title: "Applied on",
+                                              value: If(
+                                                  IsBlank(
+                                                      Topic.Job3.crcce_appliedon
+                                                  ),
+                                                  "Not recorded",
+                                                  Text(
+                                                      Topic.Job3.crcce_appliedon,
+                                                      "yyyy-mm-dd"
+                                                  )
+                                              )
+                                          },
+                                          {
+                                              title: "Status",
+                                              value: Coalesce(
+                                                  Topic.Job3.crcce_applicationstatus,
+                                                  "Not specified"
+                                              )
+                                          }
+                                      ]
+                                  }
+                              ]
+                          }
+                      ]
+                  }
+
+    - kind: BeginDialog
+      id: O3v95Z
+      dialog: crcce_CampusCareerAgent.topic.TopicGuide_triggered
+
+    - kind: EndDialog
+      id: MCyfxY
+
+inputType: {}
+outputType: {}

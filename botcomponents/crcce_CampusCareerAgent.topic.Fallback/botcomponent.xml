@@ -1,0 +1,11 @@
+<botcomponent schemaname="crcce_CampusCareerAgent.topic.Fallback">
+  <componenttype>9</componenttype>
+  <description>当用户言语与任何现有主题都不匹配时，此系统主题将会触发。</description>
+  <iscustomizable>0</iscustomizable>
+  <name>备用内容</name>
+  <parentbotid>
+    <schemaname>crcce_CampusCareerAgent</schemaname>
+  </parentbotid>
+  <statecode>0</statecode>
+  <statuscode>1</statuscode>
+</botcomponent>

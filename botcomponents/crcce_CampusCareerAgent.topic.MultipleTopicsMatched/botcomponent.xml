@@ -1,0 +1,11 @@
+<botcomponent schemaname="crcce_CampusCareerAgent.topic.MultipleTopicsMatched">
+  <componenttype>9</componenttype>
+  <description>当智能体发现有多个主题与传入消息相匹配并需要明确应触发哪个主题时，会触发此系统主题。</description>
+  <iscustomizable>0</iscustomizable>
+  <name>多个匹配主题</name>
+  <parentbotid>
+    <schemaname>crcce_CampusCareerAgent</schemaname>
+  </parentbotid>
+  <statecode>0</statecode>
+  <statuscode>1</statuscode>
+</botcomponent>

@@ -1,26 +1,26 @@
 <ImportExportXml version="9.2.26053.152" SolutionPackageVersion="9.2" languagecode="1033" generatedBy="CrmLive" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" OrganizationVersion="9.2.26053.152" OrganizationSchemaType="Standard" CRMServerServiceabilityVersion="9.2.26053.00152">
   <SolutionManifest>
-    <UniqueName>CampusCareerAgent</UniqueName>
+    <UniqueName>Verizon_CampusCareerAgent</UniqueName>
     <LocalizedNames>
-      <LocalizedName description="CampusCareerAgent" languagecode="1033" />
+      <LocalizedName description="Verizon_CampusCareerAgent" languagecode="1033" />
     </LocalizedNames>
     <Descriptions />
-    <Version>1.0.0.1</Version>
+    <Version>2.0.0.1</Version>
     <Managed>0</Managed>
     <Publisher>
-      <UniqueName>Crf2f42</UniqueName>
+      <UniqueName>Verizon</UniqueName>
       <LocalizedNames>
-        <LocalizedName description="CDS Default Publisher" languagecode="1033" />
+        <LocalizedName description="Verizon" languagecode="1033" />
       </LocalizedNames>
       <Descriptions />
       <EMailAddress xsi:nil="true"></EMailAddress>
       <SupportingWebsiteUrl xsi:nil="true"></SupportingWebsiteUrl>
-      <CustomizationPrefix>crcce</CustomizationPrefix>
-      <CustomizationOptionValuePrefix>75424</CustomizationOptionValuePrefix>
+      <CustomizationPrefix>verizon</CustomizationPrefix>
+      <CustomizationOptionValuePrefix>29139</CustomizationOptionValuePrefix>
       <Addresses>
         <Address>
           <AddressNumber>1</AddressNumber>
-          <AddressTypeCode xsi:nil="true"></AddressTypeCode>
+          <AddressTypeCode>1</AddressTypeCode>
           <City xsi:nil="true"></City>
           <County xsi:nil="true"></County>
           <Country xsi:nil="true"></Country>
@@ -36,7 +36,7 @@
           <PostalCode xsi:nil="true"></PostalCode>
           <PostOfficeBox xsi:nil="true"></PostOfficeBox>
           <PrimaryContactName xsi:nil="true"></PrimaryContactName>
-          <ShippingMethodCode xsi:nil="true"></ShippingMethodCode>
+          <ShippingMethodCode>1</ShippingMethodCode>
           <StateOrProvince xsi:nil="true"></StateOrProvince>
           <Telephone1 xsi:nil="true"></Telephone1>
           <Telephone2 xsi:nil="true"></Telephone2>
@@ -48,7 +48,7 @@
         </Address>
         <Address>
           <AddressNumber>2</AddressNumber>
-          <AddressTypeCode xsi:nil="true"></AddressTypeCode>
+          <AddressTypeCode>1</AddressTypeCode>
           <City xsi:nil="true"></City>
           <County xsi:nil="true"></County>
           <Country xsi:nil="true"></Country>
@@ -64,7 +64,7 @@
           <PostalCode xsi:nil="true"></PostalCode>
           <PostOfficeBox xsi:nil="true"></PostOfficeBox>
           <PrimaryContactName xsi:nil="true"></PrimaryContactName>
-          <ShippingMethodCode xsi:nil="true"></ShippingMethodCode>
+          <ShippingMethodCode>1</ShippingMethodCode>
           <StateOrProvince xsi:nil="true"></StateOrProvince>
           <Telephone1 xsi:nil="true"></Telephone1>
           <Telephone2 xsi:nil="true"></Telephone2>
@@ -77,9 +77,22 @@
       </Addresses>
     </Publisher>
     <RootComponents>
-      <RootComponent type="1" schemaName="crcce_applicationrecord" behavior="0" />
+      <RootComponent type="1" schemaName="crcce_activityopportunity" behavior="0" />
+      <RootComponent type="1" schemaName="crcce_job" behavior="0" />
       <RootComponent type="1" schemaName="crcce_jobopportunity" behavior="0" />
       <RootComponent type="1" schemaName="crcce_studentprofile" behavior="0" />
+      <RootComponent type="1" schemaName="crcce_studentprofile_v2" behavior="0" />
+      <RootComponent type="29" id="{42e65cee-bb6b-f111-ab0d-70a8a59b0723}" behavior="0" />
+      <RootComponent type="29" id="{4529a43e-206a-f111-ab0b-70a8a59b0723}" behavior="0" />
+      <RootComponent type="29" id="{70b16b21-6e6c-f111-ab0d-70a8a59b0723}" behavior="0" />
+      <RootComponent type="29" id="{77b9dff9-aa2e-b3e0-0e8a-c50c0f5ec0d3}" behavior="0" />
+      <RootComponent type="29" id="{86339482-0b6a-f111-ab0b-70a8a59b0723}" behavior="0" />
+      <RootComponent type="29" id="{907fd7c8-bffb-a536-08d6-18c091adb5a3}" behavior="0" />
+      <RootComponent type="29" id="{e98a59ce-346a-f111-ab0b-70a8a59b0723}" behavior="0" />
+      <RootComponent type="401" id="{3d3b8f4c-1c82-4d5d-b128-ec2097981bf8}" behavior="0" />
+      <RootComponent type="401" id="{763b9b17-90fa-4d3d-95af-185a4f588443}" behavior="0" />
+      <RootComponent type="401" id="{9818fbe1-6811-41ce-aca8-c75a5e5747be}" behavior="0" />
+      <RootComponent type="401" id="{b4e4655c-78a2-41b2-8988-7a3e95c9b53b}" behavior="0" />
     </RootComponents>
     <MissingDependencies />
   </SolutionManifest>

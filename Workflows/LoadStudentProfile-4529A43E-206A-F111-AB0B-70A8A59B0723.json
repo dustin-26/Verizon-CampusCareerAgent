@@ -1,0 +1,194 @@
+{
+  "properties": {
+    "connectionReferences": {
+      "shared_commondataserviceforapps": {
+        "api": {
+          "name": "shared_commondataserviceforapps"
+        },
+        "connection": {
+          "connectionReferenceLogicalName": "new_sharedcommondataserviceforapps_12750"
+        },
+        "runtimeSource": "embedded"
+      }
+    },
+    "definition": {
+      "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+      "contentVersion": "1.0.0.0",
+      "actions": {
+        "列出所选环境中的行": {
+          "type": "OpenApiConnection",
+          "inputs": {
+            "parameters": {
+              "organization": "https://org4cd1be5d.crm.dynamics.com",
+              "entityName": "crcce_studentprofiles",
+              "$filter": "crcce_useremail eq '@{triggerBody()?['text']}'",
+              "$top": 1
+            },
+            "host": {
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+              "operationId": "ListRecordsWithOrganization",
+              "connectionName": "shared_commondataserviceforapps"
+            }
+          },
+          "runAfter": {}
+        },
+        "条件": {
+          "type": "If",
+          "expression": {
+            "and": [
+              {
+                "equals": [
+                  "empty(outputs('列出所选环境中的行')?['body/value'])",
+                  true
+                ]
+              }
+            ]
+          },
+          "actions": {
+            "将一个或多个值返回到_Power_Virtual_Agents": {
+              "type": "Response",
+              "kind": "VirtualAgent",
+              "inputs": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "title": "Status",
+                      "type": "string",
+                      "x-ms-content-hint": "TEXT",
+                      "x-ms-dynamically-added": true
+                    },
+                    "profiletargetcity": {
+                      "title": "ProfileTargetCity",
+                      "type": "string",
+                      "x-ms-content-hint": "TEXT",
+                      "x-ms-dynamically-added": true
+                    },
+                    "profilestudentname": {
+                      "title": "ProfileStudentName",
+                      "type": "string",
+                      "x-ms-content-hint": "TEXT",
+                      "x-ms-dynamically-added": true
+                    },
+                    "profilestudentschool": {
+                      "title": "ProfileStudentSchool",
+                      "type": "string",
+                      "x-ms-content-hint": "TEXT",
+                      "x-ms-dynamically-added": true
+                    },
+                    "profiletargetindustry": {
+                      "title": "ProfileTargetIndustry",
+                      "type": "string",
+                      "x-ms-content-hint": "TEXT",
+                      "x-ms-dynamically-added": true
+                    }
+                  },
+                  "additionalProperties": {}
+                },
+                "statusCode": 200,
+                "body": {
+                  "status": "NotFound"
+                }
+              }
+            }
+          },
+          "else": {
+            "actions": {
+              "将一个或多个值返回到_Power_Virtual_Agents_1": {
+                "type": "Response",
+                "kind": "VirtualAgent",
+                "inputs": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "status": {
+                        "title": "Status",
+                        "type": "string",
+                        "x-ms-content-hint": "TEXT",
+                        "x-ms-dynamically-added": true
+                      },
+                      "profiletargetcity": {
+                        "title": "ProfileTargetCity",
+                        "type": "string",
+                        "x-ms-content-hint": "TEXT",
+                        "x-ms-dynamically-added": true
+                      },
+                      "profilestudentname": {
+                        "title": "ProfileStudentName",
+                        "type": "string",
+                        "x-ms-content-hint": "TEXT",
+                        "x-ms-dynamically-added": true
+                      },
+                      "profilestudentschool": {
+                        "title": "ProfileStudentSchool",
+                        "type": "string",
+                        "x-ms-content-hint": "TEXT",
+                        "x-ms-dynamically-added": true
+                      },
+                      "profiletargetindustry": {
+                        "title": "ProfileTargetIndustry",
+                        "type": "string",
+                        "x-ms-content-hint": "TEXT",
+                        "x-ms-dynamically-added": true
+                      }
+                    },
+                    "additionalProperties": {}
+                  },
+                  "statusCode": 200,
+                  "body": {
+                    "status": "Found",
+                    "profiletargetcity": "first(outputs('列出所选环境中的行')?['body/value'])?['crcce_targetcity']",
+                    "profilestudentname": "first(outputs('列出所选环境中的行')?['body/value'])?['crcce_studentname']",
+                    "profilestudentschool": "first(outputs('列出所选环境中的行')?['body/value'])?['crcce_studentschool']",
+                    "profiletargetindustry": "first(outputs('列出所选环境中的行')?['body/value'])?['crcce_targetindustry']"
+                  }
+                }
+              }
+            }
+          },
+          "runAfter": {
+            "列出所选环境中的行": [
+              "SUCCEEDED"
+            ]
+          }
+        }
+      },
+      "triggers": {
+        "manual": {
+          "type": "Request",
+          "kind": "VirtualAgent",
+          "inputs": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "text": {
+                  "description": "UserEmail",
+                  "title": "文本",
+                  "type": "string",
+                  "x-ms-content-hint": "TEXT",
+                  "x-ms-dynamically-added": true
+                }
+              },
+              "required": [
+                "text"
+              ]
+            }
+          }
+        }
+      },
+      "parameters": {
+        "$authentication": {
+          "defaultValue": {},
+          "type": "SecureObject"
+        },
+        "$connections": {
+          "defaultValue": {},
+          "type": "Object"
+        }
+      },
+      "outputs": {}
+    },
+    "templateName": null
+  },
+  "schemaVersion": "1.0.0.0"
+}

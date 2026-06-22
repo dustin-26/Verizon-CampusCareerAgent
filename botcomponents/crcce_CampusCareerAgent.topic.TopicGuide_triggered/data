@@ -1,0 +1,140 @@
+kind: AdaptiveDialog
+modelDescription: This agent guides the user to different topics. It should be triggered when the user says something like a greeting or asks what you can do, or doesn't know what to do.
+beginDialog:
+  kind: OnRecognizedIntent
+  id: main
+  intent: {}
+  actions:
+    - kind: SetVariable
+      id: setVariable_00nNh7
+      variable: System.User.Language
+      value:
+        kind: OptionDataValue
+        type:
+          kind: SystemOptionSet
+          name: Locale
+
+        value: English
+
+    - kind: ConditionGroup
+      id: conditionGroup_wJw0GL
+      conditions:
+        - id: conditionItem_JQSe3F
+          condition: =IsBlank(Global.ProfileId)
+          actions:
+            - kind: BeginDialog
+              id: uTGSWO
+              dialog: crcce_CampusCareerAgent.topic.StudentProfileSetup_v2_lko
+
+      elseActions:
+        - kind: AdaptiveCardPrompt
+          id: cTUThT
+          card: |-
+            {
+              "$schema": "https://adaptivecards.io/schemas/adaptive-card.json",
+              "type": "AdaptiveCard",
+              "version": "1.5",
+              "body": [
+                {
+                  "type": "TextBlock",
+                  "text": "Hi there! 👋",
+                  "weight": "Bolder",
+                  "size": "Large",
+                  "wrap": true
+                },
+                {
+                  "type": "TextBlock",
+                  "text": "I'm here to help boost your career! What would you like to work on today? Pick an option below, and I’ll guide you from there.",
+                  "wrap": true,
+                  "isSubtle": true,
+                  "spacing": "Small"
+                },
+                {
+                  "type": "Input.ChoiceSet",
+                  "id": "TopicSelection",
+                  "style": "expanded",
+                  "isRequired": true,
+                  "errorMessage": "Please choose an option to continue.",
+                  "choices": [
+                    {
+                      "title": "Setup or Update Your Profile",
+                      "value": "profile"
+                    },
+                    {
+                      "title": "Discover New Job Opportunities",
+                      "value": "opportunities"
+                    },
+                    {
+                      "title": "Discover New Activities",
+                      "value": "tailor_cv"
+                    },
+                    {
+                      "title": "Track My Applications",
+                      "value": "track_applications"
+                    },
+                    {
+                      "title": "Tips for Improvement",
+                      "value": "improvement_tips"
+                    }
+                  ],
+                  "label": "Choose an option"
+                }
+              ],
+              "actions": [
+                {
+                  "type": "Action.Submit",
+                  "title": "Continue",
+                  "data": {
+                    "actionSubmitId": "career_agent_main_menu_v1"
+                  }
+                }
+              ]
+            }
+          output:
+            binding:
+              actionSubmitId: Topic.actionSubmitId
+              TopicSelection: Topic.TopicSelection
+
+          outputType:
+            properties:
+              actionSubmitId: String
+              TopicSelection: String
+
+        - kind: ConditionGroup
+          id: qOk6lt
+          conditions:
+            - id: H1JQJY
+              condition: =Topic.TopicSelection = "improvement_tips"
+              actions:
+                - kind: BeginDialog
+                  id: bgRb8q
+                  dialog: crcce_CampusCareerAgent.topic.v2_WeaknessAnalysisandRecommendation
+
+            - id: ZYJcTS
+              condition: =Topic.TopicSelection = "opportunities"
+              actions:
+                - kind: BeginDialog
+                  id: 5IfTge
+                  dialog: crcce_CampusCareerAgent.topic.ViewandApplyforPositions
+
+            - id: uCxXlN
+              condition: =Topic.TopicSelection = "tailor_cv"
+              actions:
+                - kind: BeginDialog
+                  id: SMUHWC
+                  dialog: crcce_CampusCareerAgent.topic.v2_ViewandApplyforAcativities
+
+            - id: Qfo9aO
+              condition: =Topic.TopicSelection = "track_applications"
+              actions:
+                - kind: BeginDialog
+                  id: iA8and
+                  dialog: crcce_CampusCareerAgent.topic.v2_TrackApplications
+
+          elseActions:
+            - kind: BeginDialog
+              id: WPGWBa
+              dialog: crcce_CampusCareerAgent.topic.StudentProfileSetup_v2_lko
+
+inputType: {}
+outputType: {}

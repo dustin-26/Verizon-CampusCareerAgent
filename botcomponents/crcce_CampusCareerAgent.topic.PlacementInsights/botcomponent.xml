@@ -1,0 +1,11 @@
+<botcomponent schemaname="crcce_CampusCareerAgent.topic.PlacementInsights">
+  <componenttype>9</componenttype>
+  <description>Shows recruitment preference analytics based on aggregated student application and outcome data. Identifies skill and course patterns valued by different industries.</description>
+  <iscustomizable>0</iscustomizable>
+  <name>Placement Insights</name>
+  <parentbotid>
+    <schemaname>crcce_CampusCareerAgent</schemaname>
+  </parentbotid>
+  <statecode>1</statecode>
+  <statuscode>2</statuscode>
+</botcomponent>

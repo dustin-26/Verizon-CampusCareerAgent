@@ -1,0 +1,6 @@
+kind: Variable
+name: choice
+scope: User
+isExternalInitializationAllowed: true
+isOutputToExternalCallers: true
+initializationTimeoutInMilliseconds: 0

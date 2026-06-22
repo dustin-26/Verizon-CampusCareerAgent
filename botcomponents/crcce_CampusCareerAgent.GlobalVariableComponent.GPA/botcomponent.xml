@@ -1,0 +1,11 @@
+<botcomponent schemaname="crcce_CampusCareerAgent.GlobalVariableComponent.GPA">
+  <componenttype>12</componenttype>
+  <description>Grade point average</description>
+  <iscustomizable>0</iscustomizable>
+  <name>GPA</name>
+  <parentbotid>
+    <schemaname>crcce_CampusCareerAgent</schemaname>
+  </parentbotid>
+  <statecode>0</statecode>
+  <statuscode>1</statuscode>
+</botcomponent>

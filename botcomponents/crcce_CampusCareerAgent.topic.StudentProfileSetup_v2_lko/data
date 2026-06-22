@@ -1,0 +1,954 @@
+kind: AdaptiveDialog
+modelDescription: |-
+  Only triggers this topic when the user:
+  - inputs "/setup"; or
+  - explicitly asks to set up, create, or update their student profile.
+beginDialog:
+  kind: OnRecognizedIntent
+  id: main
+  intent:
+    displayName: 问候语 (Copy)
+    includeInOnSelectIntent: false
+    triggerQueries:
+      - hi
+      - hello
+      - hey
+      - good morning
+      - good afternoon
+      - good evening
+      - start profile
+      - set up my student profile
+      - update my student profile
+      - create my career profile
+
+  actions:
+    - kind: SetVariable
+      id: setVariable_QlB0MQ
+      variable: System.User.Language
+      value:
+        kind: OptionDataValue
+        type:
+          kind: SystemOptionSet
+          name: Locale
+
+        value: English
+
+    - kind: InvokeFlowAction
+      id: invokeFlowAction_nJo071
+      input:
+        binding:
+          text: =System.User.Email
+
+      output:
+        binding:
+          email: Topic.Email
+          found: Topic.Found
+          gpa: Topic.Gpa
+          industry: Topic.Industry
+          location: Topic.Location
+          major: Topic.Major
+          name: Topic.Name
+          phone: Topic.Phone
+          position: Topic.Position
+          profileid: Topic.ProfileId
+          resume: Topic.Resume
+          school: Topic.School
+
+      flowId: 70b16b21-6e6c-f111-ab0d-70a8a59b0723
+
+    - kind: SetMultipleVariables
+      id: setVariable_RW0KRE
+      assignments:
+        - variable: Global.Email
+          value: =Topic.Email
+
+        - variable: Global.Name
+          value: =Topic.Name
+
+        - variable: Global.School
+          value: =Topic.School
+
+        - variable: Global.Major
+          value: =Topic.Major
+
+        - variable: Global.Gpa
+          value: =Topic.Gpa
+
+        - variable: Global.Industry
+          value: =Topic.Industry
+
+        - variable: Global.Location
+          value: =Topic.Location
+
+        - variable: Global.Phone
+          value: =Topic.Phone
+
+        - variable: Global.Resume
+          value: =Topic.Resume
+
+        - variable: Global.ProfileId
+          value: =Topic.ProfileId
+
+        - variable: Global.Position
+          value: =Topic.Position
+
+    - kind: ConditionGroup
+      id: conditionGroup_5mJHfN
+      conditions:
+        - id: conditionItem_e5pw0w
+          condition: =Topic.Found = true
+          actions:
+            - kind: Question
+              id: question_VZjPDQ
+              interruptionPolicy:
+                allowInterruption: true
+
+              variable: init:Topic.UpdateOrNot
+              prompt: You've already have a profile! Would you like to check or update it?
+              entity:
+                kind: EmbeddedEntity
+                definition:
+                  kind: ClosedListEntity
+                  items:
+                    - id: Check my current profile and update.
+                      displayName: Check my current profile and update.
+
+                    - id: No, thanks.
+                      displayName: No, thanks.
+
+            - kind: ConditionGroup
+              id: conditionGroup_PDBKhP
+              conditions:
+                - id: conditionItem_FulOS2
+                  condition: =Topic.UpdateOrNot = 'crcce_CampusCareerAgent.topic.StudentProfileSetup_v2_lko.main.question_VZjPDQ'.'Check my current profile and update.'
+                  actions:
+                    - kind: SendActivity
+                      id: sendActivity_OungP5
+                      activity: |-
+                        {"Email: [" & Coalesce(Global.Email, "") & "]"
+                        &
+                        Char(10) & "Name: [" & Coalesce(Global.Name, "") & "]"
+                        &
+                        Char(10) & "School: [" & Coalesce(Global.School, "") & "]"
+                        &
+                        Char(10) & "Major: [" & Coalesce(Global.Major, "") & "]"
+                        &
+                        Char(10) & "GPA: [" & Coalesce(Global.Gpa, "") & "]"
+                        &
+                        Char(10) & "Industry: [" & Coalesce(Global.Industry, "") & "]"}
+
+                    - kind: AdaptiveCardPrompt
+                      id: cuYIKm
+                      card: |-
+                        ={
+                            '$schema': "http://adaptivecards.microsoft.com/schemas/adaptive-card.json",
+                            type: "AdaptiveCard",
+                            version: "1.5",
+                            body: [
+                                {
+                                    type: "TextBlock",
+                                    text: "Review and update your student profile",
+                                    weight: "Bolder",
+                                    size: "Large",
+                                    wrap: true
+                                },
+                                {
+                                    type: "TextBlock",
+                                    text: "Edit any information that needs to be updated.",
+                                    wrap: true,
+                                    isSubtle: true
+                                },
+                                {
+                                    type: "TextBlock",
+                                    text: "Signed-in email: " & Coalesce(Global.Email, ""),
+                                    wrap: true,
+                                    spacing: "Medium"
+                                },
+                                {
+                                    type: "Input.Text",
+                                    id: "CardName",
+                                    label: "Name",
+                                    value: Coalesce(Global.Name, ""),
+                                    isRequired: true,
+                                    errorMessage: "Please enter your name."
+                                },
+                                {
+                                    type: "Input.Text",
+                                    id: "CardSchool",
+                                    label: "School",
+                                    value: Coalesce(Global.School, ""),
+                                    isRequired: true,
+                                    errorMessage: "Please enter your school."
+                                },
+                                {
+                                    type: "Input.Text",
+                                    id: "CardMajor",
+                                    label: "Major",
+                                    value: Coalesce(Global.Major, ""),
+                                    isRequired: true,
+                                    errorMessage: "Please enter your major."
+                                },
+                                {
+                                    type: "Input.Text",
+                                    id: "CardGPA",
+                                    label: "GPA",
+                                    value: Coalesce(Global.Gpa, ""),
+                                    placeholder: "For example: 3.65"
+                                },
+                                {
+                                    type: "Input.Text",
+                                    id: "CardIndustry",
+                                    label: "Target industry",
+                                    value: Coalesce(Global.Industry, ""),
+                                    placeholder: "For example: Technology, Consulting"
+                                },
+                                {
+                                    type: "Input.Text",
+                                    id: "CardLocation",
+                                    label: "Target location",
+                                    value: Coalesce(Global.Location, ""),
+                                    placeholder: "For example: Hong Kong"
+                                },
+                                {
+                                    type: "Input.Text",
+                                    id: "CardPhone",
+                                    label: "Phone number",
+                                    value: Coalesce(Global.Phone, ""),
+                                    style: "tel"
+                                },
+                                {
+                                    type: "Input.Text",
+                                    id: "CardPosition",
+                                    label: "Target position",
+                                    value: Coalesce(Global.Position, ""),
+                                    placeholder: "For example: Product Management Intern"
+                                }
+                            ],
+                            actions: [
+                                {
+                                    type: "Action.Submit",
+                                    title: "Continue",
+                                    data: {
+                                        actionSubmitId: "update_student_profile_v1"
+                                    }
+                                }
+                            ]
+                        }
+                      output:
+                        binding:
+                          actionSubmitId: Topic.actionSubmitId
+                          CardGPA: Topic.Gpa
+                          CardIndustry: Topic.Industry
+                          CardLocation: Topic.Location
+                          CardMajor: Topic.Major
+                          CardName: Topic.Name
+                          CardPhone: Topic.Phone
+                          CardPosition: Topic.Position
+                          CardSchool: Topic.School
+
+                      outputType:
+                        properties:
+                          actionSubmitId: String
+                          CardGPA: String
+                          CardIndustry: String
+                          CardLocation: String
+                          CardMajor: String
+                          CardName: String
+                          CardPhone: String
+                          CardPosition: String
+                          CardSchool: String
+
+                    - kind: SetMultipleVariables
+                      id: oqT7Ku
+                      assignments:
+                        - variable: Global.Email
+                          value: =Topic.Email
+
+                        - variable: Global.Name
+                          value: =Topic.Name
+
+                        - variable: Global.School
+                          value: =Topic.School
+
+                        - variable: Global.Major
+                          value: =Topic.Major
+
+                        - variable: Global.Gpa
+                          value: =Topic.Gpa
+
+                        - variable: Global.Industry
+                          value: =Topic.Industry
+
+                        - variable: Global.Location
+                          value: =Topic.Location
+
+                        - variable: Global.Phone
+                          value: =Topic.Phone
+
+                        - variable: Global.Resume
+                          value: =Topic.Resume
+
+                        - variable: Global.Position
+                          value: =Topic.Position
+
+                    - kind: ConditionGroup
+                      id: conditionGroup_FQzmf2
+                      conditions:
+                        - id: conditionItem_hRCFLi
+                          condition: =Len(Coalesce(Global.Resume, "")) < 3
+                          actions:
+                            - kind: Question
+                              id: question_2IgQek
+                              interruptionPolicy:
+                                allowInterruption: true
+
+                              variable: init:Topic.Var1
+                              prompt: It seems that you don't have a resume yet. Upload or create from scratch?
+                              entity:
+                                kind: EmbeddedEntity
+                                definition:
+                                  kind: ClosedListEntity
+                                  items:
+                                    - id: Paste my CV
+                                      displayName: Paste my CV
+
+                                    - id: Help me create a CV from strach
+                                      displayName: Help me create a CV from strach
+
+                                    - id: Skipp for now
+                                      displayName: Skipp for now
+
+                            - kind: ConditionGroup
+                              id: conditionGroup_k1l7tO
+                              conditions:
+                                - id: conditionItem_DHcbJS
+                                  condition: =Topic.Var1 = 'crcce_CampusCareerAgent.topic.StudentProfileSetup_v2_lko.main.question_2IgQek'.'Paste my CV'
+                                  actions:
+                                    - kind: AdaptiveCardPrompt
+                                      id: iQl4cC
+                                      card: |-
+                                        {
+                                          "$schema": "https://adaptivecards.io/schemas/adaptive-card.json",
+                                          "type": "AdaptiveCard",
+                                          "version": "1.5",
+                                          "body": [
+                                            {
+                                              "type": "TextBlock",
+                                              "text": "Set up your profile",
+                                              "weight": "Bolder",
+                                              "size": "Large",
+                                              "wrap": true
+                                            },
+                                            {
+                                              "type": "Input.Text",
+                                              "id": "CardResume",
+                                              "label": "Full Resume",
+                                              "isMultiline": true,
+                                              "placeholder": "Paste your full resume here"
+                                            }
+                                          ],
+                                          "actions": [
+                                            {
+                                              "type": "Action.Submit",
+                                              "title": "Continue",
+                                              "data": {
+                                                "actionSubmitId": "setup_student_profile_with_resume"
+                                              }
+                                            }
+                                          ]
+                                        }
+                                      output:
+                                        binding:
+                                          actionSubmitId: Topic.actionSubmitId
+                                          CardResume: Topic.Resume
+
+                                      outputType:
+                                        properties:
+                                          actionSubmitId: String
+                                          CardResume: String
+
+                                    - kind: SetVariable
+                                      id: GQVALV
+                                      variable: Global.Resume
+                                      value: =Topic.Resume
+
+                                - id: conditionItem_ESbtVY
+                                  condition: =Topic.Var1 = 'crcce_CampusCareerAgent.topic.StudentProfileSetup_v2_lko.main.question_2IgQek'.'Help me create a CV from strach'
+                                  actions:
+                                    - kind: BeginDialog
+                                      id: 7ctISE
+                                      dialog: crcce_CampusCareerAgent.topic.BuildResumeFromScratch
+
+                                - id: conditionItem_1hPeLD
+                                  condition: =Topic.Var1 = 'crcce_CampusCareerAgent.topic.StudentProfileSetup_v2_lko.main.question_2IgQek'.'Skipp for now'
+
+                              elseActions:
+                                - kind: GotoAction
+                                  id: EeYiQ8
+                                  actionId: question_2IgQek
+
+                      elseActions:
+                        - kind: AdaptiveCardPrompt
+                          id: grGSUO
+                          card: |-
+                            ={
+                              '$schema': "https://adaptivecards.io/schemas/adaptive-card.json",
+                              type: "AdaptiveCard",
+                              version: "1.5",
+                              body: [
+                                {
+                                  type: "TextBlock",
+                                  text: "Review your current resume",
+                                  weight: "Bolder",
+                                  size: "Large",
+                                  wrap: true
+                                },
+                                {
+                                  type: "TextBlock",
+                                  text: "Review the resume currently saved in your student profile. Keep the current version or describe the changes you would like Copilot to make.",
+                                  wrap: true,
+                                  isSubtle: true
+                                },
+                                {
+                                  type: "Container",
+                                  spacing: "Medium",
+                                  separator: true,
+                                  items: [
+                                    {
+                                      type: "TextBlock",
+                                      text: Coalesce(Global.Resume, ""),
+                                      wrap: true
+                                    }
+                                  ]
+                                },
+                                {
+                                  type: "Input.Text",
+                                  id: "ResumeChangeRequest",
+                                  label: "Describe the changes you would like Copilot to make",
+                                  placeholder: "For example: Rewrite my Campus Career Agent project to emphasize product management and AI skills.",
+                                  isMultiline: true,
+                                  isRequired: true,
+                                  errorMessage: "Please describe how you would like to modify your resume.",
+                                  spacing: "Medium"
+                                },
+                                {
+                                  type: "TextBlock",
+                                  text: "Only include accurate information. Copilot will not invent experiences, dates, achievements, or skills.",
+                                  wrap: true,
+                                  isSubtle: true,
+                                  spacing: "Small"
+                                }
+                              ],
+                              actions: [
+                                {
+                                  type: "Action.Submit",
+                                  title: "Keep Current Resume",
+                                  associatedInputs: "none",
+                                  data: {
+                                    actionSubmitId: "resume_keep_v1",
+                                    ResumeAction: "nothing"
+                                  }
+                                },
+                                {
+                                  type: "Action.Submit",
+                                  title: "Modify and Review",
+                                  associatedInputs: "auto",
+                                  data: {
+                                    actionSubmitId: "resume_modify_v1",
+                                    ResumeAction: "modify"
+                                  }
+                                }
+                              ]
+                            }
+                          output:
+                            binding:
+                              actionSubmitId: Topic.actionSubmitId
+                              ResumeAction: Topic.ResumeAction
+                              ResumeChangeRequest: Topic.ResumeChangeRequest
+
+                          outputType:
+                            properties:
+                              actionSubmitId: String
+                              ResumeAction: String
+                              ResumeChangeRequest: String
+
+                        - kind: ConditionGroup
+                          id: vHH3T2
+                          conditions:
+                            - id: JqFcvN
+                              condition: =Topic.ResumeAction = "nothing"
+
+                          elseActions:
+                            - kind: SetVariable
+                              id: iZS4Aj
+                              variable: Topic.BasicProfile
+                              value: |-
+                                ="CONFIRMED BASIC PROFILE — DO NOT ASK THE USER FOR THESE DETAILS AGAIN"
+                                &
+                                Char(10) & Char(10)
+                                &
+                                "Name: " & Coalesce(Global.Name, "Not provided")
+                                &
+                                Char(10) & "Email: " & Coalesce(Global.Email, "Not provided")
+                                &
+                                Char(10) & "Phone: " & Coalesce(Global.Phone, "Not provided")
+                                &
+                                Char(10) & "Location: " & Coalesce(Global.Location, "Not provided")
+                                &
+                                Char(10) & "School: " & Coalesce(Global.School, "Not provided")
+                                &
+                                Char(10) & "Major: " & Coalesce(Global.Major, "Not provided")
+                                &
+                                Char(10) & "GPA: " & Coalesce(Global.Gpa, "Not provided")
+                                &
+                                Char(10) & "Target industry: " & Coalesce(Global.Industry, "Not provided")
+                                &
+                                Char(10) & "Target position: " & Coalesce(Global.Position, "Not provided")
+
+                            - kind: InvokeAIBuilderModelAction
+                              id: 72qcAH
+                              input:
+                                binding:
+                                  BasicProfile: =Topic.BasicProfile
+                                  ChangeRequest: =Topic.ResumeChangeRequest
+                                  CurrentResume: =Global.Resume
+
+                              output:
+                                binding:
+                                  predictionOutput: Topic.GeneratedResume
+
+                              aIModelId: 9818fbe1-6811-41ce-aca8-c75a5e5747be
+
+                            - kind: SetVariable
+                              id: 0wpxwA
+                              variable: Global.Resume
+                              value: =Topic.GeneratedResume.text
+
+                            - kind: GotoAction
+                              id: Py0W5R
+                              actionId: grGSUO
+
+                - id: conditionItem_2AyCzI
+                  condition: =Topic.UpdateOrNot = 'crcce_CampusCareerAgent.topic.StudentProfileSetup_v2_lko.main.question_VZjPDQ'.'No, thanks.'
+
+              elseActions:
+                - kind: GotoAction
+                  id: Vnna0a
+                  actionId: question_VZjPDQ
+
+      elseActions:
+        - kind: InvokeFlowAction
+          id: 1HZjjh
+          input:
+            binding:
+              text: =System.User.Email
+
+          output:
+            binding:
+              email: Global.Email
+              found: Topic.Found
+              gpa: Global.Gpa
+              industry: Global.Industry
+              location: Global.Location
+              major: Global.Major
+              name: Global.Name
+              phone: Global.Phone
+              position: Global.Position
+              profileid: Global.ProfileId
+              resume: Global.Resume
+              school: Global.School
+
+          flowId: 70b16b21-6e6c-f111-ab0d-70a8a59b0723
+
+        - kind: Question
+          id: wzfnU9
+          interruptionPolicy:
+            allowInterruption: true
+
+          variable: Topic.HasResume
+          prompt: Welcome! I'm your Campus Career Agent. Before we get started — do you have a resume?
+          entity:
+            kind: EmbeddedEntity
+            definition:
+              kind: ClosedListEntity
+              items:
+                - id: Yes, I'll paste my full resume later.
+                  displayName: Yes, I'll paste my full resume later.
+
+                - id: No, please help me setup my resume.
+                  displayName: No, please help me setup my resume.
+
+            displayName: EmbeddedEntity-bpLR45
+
+        - kind: ConditionGroup
+          id: conditionGroup_dzoUrS
+          conditions:
+            - id: conditionItem_4CtnUT
+              condition: =Topic.HasResume = 'crcce_CampusCareerAgent.topic.StudentProfileSetup_v2_lko.main.wzfnU9'.'Yes, I''ll paste my full resume later.'
+              actions:
+                - kind: AdaptiveCardPrompt
+                  id: EIlCgr
+                  card: |-
+                    {
+                      "$schema": "https://adaptivecards.io/schemas/adaptive-card.json",
+                      "type": "AdaptiveCard",
+                      "version": "1.5",
+                      "body": [
+                        {
+                          "type": "TextBlock",
+                          "text": "Set up your profile",
+                          "weight": "Bolder",
+                          "size": "Large",
+                          "wrap": true
+                        },
+                        {
+                          "type": "TextBlock",
+                          "text": "This information helps me tailor your CV and provide recommendations for you.",
+                          "wrap": true,
+                          "isSubtle": true
+                        },
+                        {
+                          "type": "TextBlock",
+                          "text": "Signed-in email",
+                          "wrap": true,
+                          "spacing": "Medium"
+                        },
+                        {
+                          "type": "Input.Text",
+                          "id": "CardPhone",
+                          "label": "Phone number",
+                          "style": "Tel",
+                          "isRequired": true,
+                          "errorMessage": "Please enter your name."
+                        },
+                        {
+                          "type": "Input.Text",
+                          "id": "CardName",
+                          "label": "Name",
+                          "isRequired": true,
+                          "errorMessage": "Please enter your name."
+                        },
+                        {
+                          "type": "Input.Text",
+                          "id": "CardSchool",
+                          "label": "School",
+                          "isRequired": true,
+                          "errorMessage": "Please enter your school."
+                        },
+                        {
+                          "type": "Input.Text",
+                          "id": "CardMajor",
+                          "label": "Major",
+                          "isRequired": true,
+                          "errorMessage": "Please enter your major."
+                        },
+                        {
+                          "type": "Input.Text",
+                          "id": "CardGPA",
+                          "label": "GPA",
+                          "placeholder": "For example: 3.65",
+                          "isRequired": true,
+                          "errorMessage": "Please enter your GPA."
+                        },
+                        {
+                          "type": "Input.Text",
+                          "id": "CardIndustry",
+                          "label": "Target industry",
+                          "isRequired": true,
+                          "errorMessage": "Please enter your target industry.",
+                          "placeholder": "For example: Technology, Consulting"
+                        },
+                        {
+                          "type": "Input.Text",
+                          "id": "CardLocation",
+                          "label": "Target location",
+                          "isRequired": true,
+                          "errorMessage": "Please enter your location.",
+                          "placeholder": "For example: Hong Kong"
+                        },
+                        {
+                          "type": "Input.Text",
+                          "id": "CardPosition",
+                          "label": "Target position",
+                          "isRequired": true,
+                          "errorMessage": "Please enter your target position.",
+                          "placeholder": "For example: Product Management Intern"
+                        },
+                        {
+                          "type": "Input.Text",
+                          "id": "CardResume",
+                          "label": "Full Resume",
+                          "isMultiline": true,
+                          "isRequired": true,
+                          "errorMessage": "Please enter your resume.",
+                          "placeholder": "Paste your full resume here"
+                        }
+                      ],
+                      "actions": [
+                        {
+                          "type": "Action.Submit",
+                          "title": "Continue",
+                          "data": {
+                            "actionSubmitId": "setup_student_profile_with_resume"
+                          }
+                        }
+                      ]
+                    }
+                  output:
+                    binding:
+                      actionSubmitId: Topic.actionSubmitId
+                      CardGPA: Topic.Gpa
+                      CardIndustry: Topic.Industry
+                      CardLocation: Topic.Location
+                      CardMajor: Topic.Major
+                      CardName: Topic.Name
+                      CardPhone: Topic.Phone
+                      CardPosition: Topic.Position
+                      CardResume: Topic.Resume
+                      CardSchool: Topic.School
+
+                  outputType:
+                    properties:
+                      actionSubmitId: String
+                      CardGPA: String
+                      CardIndustry: String
+                      CardLocation: String
+                      CardMajor: String
+                      CardName: String
+                      CardPhone: String
+                      CardPosition: String
+                      CardResume: String
+                      CardSchool: String
+
+                - kind: SetMultipleVariables
+                  id: Z1XwK8
+                  assignments:
+                    - variable: Global.Email
+                      value: =Topic.Email
+
+                    - variable: Global.Name
+                      value: =Topic.Name
+
+                    - variable: Global.School
+                      value: =Topic.School
+
+                    - variable: Global.Major
+                      value: =Topic.Major
+
+                    - variable: Global.Gpa
+                      value: =Topic.Gpa
+
+                    - variable: Global.Industry
+                      value: =Topic.Industry
+
+                    - variable: Global.Location
+                      value: =Topic.Location
+
+                    - variable: Global.Phone
+                      value: =Topic.Phone
+
+                    - variable: Global.Resume
+                      value: =Topic.Resume
+
+                    - variable: Global.Position
+                      value: =Topic.Position
+
+            - id: conditionItem_B1P7xG
+              condition: =Topic.HasResume = 'crcce_CampusCareerAgent.topic.StudentProfileSetup_v2_lko.main.wzfnU9'.'No, please help me setup my resume.'
+              actions:
+                - kind: AdaptiveCardPrompt
+                  id: Sqy3gR
+                  card: |-
+                    {
+                      "$schema": "https://adaptivecards.io/schemas/adaptive-card.json",
+                      "type": "AdaptiveCard",
+                      "version": "1.5",
+                      "body": [
+                        {
+                          "type": "TextBlock",
+                          "text": "Set up your profile",
+                          "weight": "Bolder",
+                          "size": "Large",
+                          "wrap": true
+                        },
+                        {
+                          "type": "TextBlock",
+                          "text": "This information helps me tailor your CV and provide recommendations for you.",
+                          "wrap": true,
+                          "isSubtle": true
+                        },
+                        {
+                          "type": "TextBlock",
+                          "text": "Signed-in email",
+                          "wrap": true,
+                          "spacing": "Medium"
+                        },
+                        {
+                          "type": "Input.Text",
+                          "id": "CardPhone",
+                          "label": "Phone number",
+                          "style": "Tel",
+                          "isRequired": true,
+                          "errorMessage": "Please enter your name."
+                        },
+                        {
+                          "type": "Input.Text",
+                          "id": "CardName",
+                          "label": "Name",
+                          "isRequired": true,
+                          "errorMessage": "Please enter your name."
+                        },
+                        {
+                          "type": "Input.Text",
+                          "id": "CardSchool",
+                          "label": "School",
+                          "isRequired": true,
+                          "errorMessage": "Please enter your school."
+                        },
+                        {
+                          "type": "Input.Text",
+                          "id": "CardMajor",
+                          "label": "Major",
+                          "isRequired": true,
+                          "errorMessage": "Please enter your major."
+                        },
+                        {
+                          "type": "Input.Text",
+                          "id": "CardGPA",
+                          "label": "GPA",
+                          "placeholder": "For example: 3.65",
+                          "isRequired": true,
+                          "errorMessage": "Please enter your GPA."
+                        },
+                        {
+                          "type": "Input.Text",
+                          "id": "CardIndustry",
+                          "label": "Target industry",
+                          "isRequired": true,
+                          "errorMessage": "Please enter your target industry.",
+                          "placeholder": "For example: Technology, Consulting"
+                        },
+                        {
+                          "type": "Input.Text",
+                          "id": "CardLocation",
+                          "label": "Target location",
+                          "isRequired": true,
+                          "errorMessage": "Please enter your location.",
+                          "placeholder": "For example: Hong Kong"
+                        },
+                        {
+                          "type": "Input.Text",
+                          "id": "CardPosition",
+                          "label": "Target position",
+                          "isRequired": true,
+                          "errorMessage": "Please enter your target position.",
+                          "placeholder": "For example: Product Management Intern"
+                        }
+                      ],
+                      "actions": [
+                        {
+                          "type": "Action.Submit",
+                          "title": "Continue",
+                          "data": {
+                            "actionSubmitId": "setup_student_profile_with_resume"
+                          }
+                        }
+                      ]
+                    }
+                  output:
+                    binding:
+                      actionSubmitId: Topic.actionSubmitId
+                      CardGPA: Topic.Gpa
+                      CardIndustry: Topic.Industry
+                      CardLocation: Topic.Location
+                      CardMajor: Topic.Major
+                      CardName: Topic.Name
+                      CardPhone: Topic.Phone
+                      CardPosition: Topic.Position
+                      CardSchool: Topic.School
+
+                  outputType:
+                    properties:
+                      actionSubmitId: String
+                      CardGPA: String
+                      CardIndustry: String
+                      CardLocation: String
+                      CardMajor: String
+                      CardName: String
+                      CardPhone: String
+                      CardPosition: String
+                      CardSchool: String
+
+                - kind: SetMultipleVariables
+                  id: mMENkM
+                  assignments:
+                    - variable: Global.Email
+                      value: =Topic.Email
+
+                    - variable: Global.Name
+                      value: =Topic.Name
+
+                    - variable: Global.School
+                      value: =Topic.School
+
+                    - variable: Global.Major
+                      value: =Topic.Major
+
+                    - variable: Global.Gpa
+                      value: =Topic.Gpa
+
+                    - variable: Global.Industry
+                      value: =Topic.Industry
+
+                    - variable: Global.Location
+                      value: =Topic.Location
+
+                    - variable: Global.Phone
+                      value: =Topic.Phone
+
+                    - variable: Global.Resume
+                      value: =Topic.Resume
+
+                    - variable: Global.Position
+                      value: =Topic.Position
+
+                - kind: BeginDialog
+                  id: k0edeA
+                  dialog: crcce_CampusCareerAgent.topic.BuildResumeFromScratch
+
+          elseActions:
+            - kind: GotoAction
+              id: cvqqFJ
+              actionId: wzfnU9
+
+    - kind: InvokeFlowAction
+      id: invokeFlowAction_Hdp4LE
+      input:
+        binding:
+          text: =Global.ProfileId
+          text_1: =Global.Gpa
+          text_2: =Global.Industry
+          text_3: =Global.Location
+          text_4: =Global.Major
+          text_5: =Global.Name
+          text_6: =Global.Phone
+          text_7: =Global.Position
+          text_8: =Topic.Resume
+          text_9: =Global.School
+
+      output:
+        binding:
+          status: Topic.Status
+
+      flowId: 77b9dff9-aa2e-b3e0-0e8a-c50c0f5ec0d3
+
+    - kind: SendActivity
+      id: 4DD7Sv
+      activity: Your profile is ready. Let's start and boost your career now!
+
+    - kind: BeginDialog
+      id: J5djOo
+      dialog: crcce_CampusCareerAgent.topic.TopicGuide_triggered
+
+    - kind: EndDialog
+      id: FGOmlk

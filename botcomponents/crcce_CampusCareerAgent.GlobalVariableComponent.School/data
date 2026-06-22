@@ -1,0 +1,6 @@
+kind: Variable
+name: School
+scope: User
+isExternalInitializationAllowed: false
+isOutputToExternalCallers: false
+initializationTimeoutInMilliseconds: 0

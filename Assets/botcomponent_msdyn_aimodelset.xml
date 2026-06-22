@@ -1,0 +1,29 @@
+<botcomponent_msdyn_aimodelset>
+  <botcomponent_msdyn_aimodel botcomponentid.schemaname="crcce_CampusCareerAgent.action.CourseRecommendation" msdyn_aimodelid.msdyn_aimodelid="763b9b17-90fa-4d3d-95af-185a4f588443">
+    <iscustomizable>1</iscustomizable>
+  </botcomponent_msdyn_aimodel>
+  <botcomponent_msdyn_aimodel botcomponentid.schemaname="crcce_CampusCareerAgent.action.GenerateStudentResume_text" msdyn_aimodelid.msdyn_aimodelid="3d3b8f4c-1c82-4d5d-b128-ec2097981bf8">
+    <iscustomizable>1</iscustomizable>
+  </botcomponent_msdyn_aimodel>
+  <botcomponent_msdyn_aimodel botcomponentid.schemaname="crcce_CampusCareerAgent.action.ResumeInterviewTurn" msdyn_aimodelid.msdyn_aimodelid="b4e4655c-78a2-41b2-8988-7a3e95c9b53b">
+    <iscustomizable>1</iscustomizable>
+  </botcomponent_msdyn_aimodel>
+  <botcomponent_msdyn_aimodel botcomponentid.schemaname="crcce_CampusCareerAgent.action.ReviseStudentResume" msdyn_aimodelid.msdyn_aimodelid="9818fbe1-6811-41ce-aca8-c75a5e5747be">
+    <iscustomizable>1</iscustomizable>
+  </botcomponent_msdyn_aimodel>
+  <botcomponent_msdyn_aimodel botcomponentid.schemaname="crcce_CampusCareerAgent.topic.BuildResumeFromScratch" msdyn_aimodelid.msdyn_aimodelid="3d3b8f4c-1c82-4d5d-b128-ec2097981bf8">
+    <iscustomizable>1</iscustomizable>
+  </botcomponent_msdyn_aimodel>
+  <botcomponent_msdyn_aimodel botcomponentid.schemaname="crcce_CampusCareerAgent.topic.BuildResumeFromScratch" msdyn_aimodelid.msdyn_aimodelid="9818fbe1-6811-41ce-aca8-c75a5e5747be">
+    <iscustomizable>1</iscustomizable>
+  </botcomponent_msdyn_aimodel>
+  <botcomponent_msdyn_aimodel botcomponentid.schemaname="crcce_CampusCareerAgent.topic.BuildResumeFromScratch" msdyn_aimodelid.msdyn_aimodelid="b4e4655c-78a2-41b2-8988-7a3e95c9b53b">
+    <iscustomizable>1</iscustomizable>
+  </botcomponent_msdyn_aimodel>
+  <botcomponent_msdyn_aimodel botcomponentid.schemaname="crcce_CampusCareerAgent.topic.StudentProfileSetup_v2_lko" msdyn_aimodelid.msdyn_aimodelid="9818fbe1-6811-41ce-aca8-c75a5e5747be">
+    <iscustomizable>1</iscustomizable>
+  </botcomponent_msdyn_aimodel>
+  <botcomponent_msdyn_aimodel botcomponentid.schemaname="crcce_CampusCareerAgent.topic.v2_WeaknessAnalysisandRecommendation" msdyn_aimodelid.msdyn_aimodelid="763b9b17-90fa-4d3d-95af-185a4f588443">
+    <iscustomizable>1</iscustomizable>
+  </botcomponent_msdyn_aimodel>
+</botcomponent_msdyn_aimodelset>
